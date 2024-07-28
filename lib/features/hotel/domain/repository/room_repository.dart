@@ -2,7 +2,7 @@
 
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
-import '../entites/room_entity.dart';
+import '../entities/room_entity.dart';
 
 abstract class RoomRepository {
   // API methods

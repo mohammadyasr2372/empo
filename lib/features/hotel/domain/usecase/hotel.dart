@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failures.dart';
-import '../entites/hotel_entity.dart';
+import '../entities/hotel_entity.dart';
 import '../repository/hotel_repository.dart';
 
 class AddHotelInfoUseCase {

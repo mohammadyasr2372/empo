@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import '../../domin/entites/hotel_entity.dart';
+import '../../domain/entities/hotel_entity.dart';
 
 class HotelModel extends Hotel {
   const HotelModel({

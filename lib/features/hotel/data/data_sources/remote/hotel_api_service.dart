@@ -8,7 +8,7 @@ import 'package:party/features/hotel/data/model/hotel_model.dart';
 
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
-import '../../../domin/entites/hotel_entity.dart';
+import '../../../domain/entities/hotel_entity.dart';
 
 abstract class HotelApiService {
   Future<Unit> add_hotelInfo({required Hotel newHotel});

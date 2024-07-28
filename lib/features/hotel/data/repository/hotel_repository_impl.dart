@@ -4,12 +4,12 @@ import 'package:dartz/dartz.dart';
 
 import 'package:party/core/error/failures.dart';
 
-import 'package:party/features/hotel/domin/entites/hotel_entity.dart';
+import 'package:party/features/hotel/domain/entities/hotel_entity.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/function/messages.dart';
 import '../../../../core/network/network_info.dart';
-import '../../domin/repository/hotel_repository.dart';
+import '../../domain/repository/hotel_repository.dart';
 import '../data_sources/remote/hotel_api_service.dart';
 
 class HotelsRepositoryImpl implements HotelRepository {

@@ -2,7 +2,7 @@
 
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
-import '../entites/hotel_entity.dart';
+import '../entities/hotel_entity.dart';
 
 abstract class HotelRepository {
   // API methods

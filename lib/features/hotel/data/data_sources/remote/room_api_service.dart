@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
-import '../../../domin/entites/room_entity.dart';
+import '../../../domain/entities/room_entity.dart';
 import '../../model/room_model.dart';
 
 abstract class RoomApiService {

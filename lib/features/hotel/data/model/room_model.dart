@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import '../../domin/entites/room_entity.dart';
+import '../../domain/entities/room_entity.dart';
 
 class RoomModel extends Room {
   const RoomModel({
