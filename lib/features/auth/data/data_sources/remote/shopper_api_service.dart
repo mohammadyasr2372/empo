@@ -142,7 +142,6 @@ class ShopperApiServiceIpml implements ShopperApiService {
   @override
   Future<Unit> registerShopper({required Shopper newShopper}) async {
     try {
-      print(newShopper.toJson());
       final response = await dio.post("$BASE_URL/api/shopper/registershopper",
           data: newShopper.toJson());
 

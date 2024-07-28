@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, await_only_futures
+// ignore_for_file: non_constant_identifier_names, await_only_futures, prefer_generic_function_type_aliases
 
 import 'package:dartz/dartz.dart';
 import 'package:party/core/error/failures.dart';

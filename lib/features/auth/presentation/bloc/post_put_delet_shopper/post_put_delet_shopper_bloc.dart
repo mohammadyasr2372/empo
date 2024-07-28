@@ -1,4 +1,4 @@
-// ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: type_literal_in_constant_pattern, depend_on_referenced_packages
 
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
