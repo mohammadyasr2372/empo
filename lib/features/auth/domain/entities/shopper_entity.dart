@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
 class Shopper extends Equatable {
-  final String? event_name;
+  final String? event_type;
   final String? name;
   final String? email;
   final String? mobile;
@@ -18,7 +18,7 @@ class Shopper extends Equatable {
   final String? newpassword;
   final String? passwordConfirm;
   const Shopper({
-    this.event_name,
+    this.event_type,
     this.name,
     this.email,
     this.mobile,
@@ -34,7 +34,7 @@ class Shopper extends Equatable {
   @override
   List<Object?> get props {
     return [
-      event_name,
+      event_type,
       name,
       email,
       mobile,
@@ -48,13 +48,14 @@ class Shopper extends Equatable {
       passwordConfirm,
     ];
   }
-   Map<String, dynamic> toMap() {
+
+  Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'event_name': event_name,
       'name': name,
       'email': email,
       'mobile': mobile,
       'password': password,
+      'event_type': event_type,
       'is_verified': is_verified,
       'image': image,
       'location': location,
@@ -64,5 +65,6 @@ class Shopper extends Equatable {
       'passwordConfirm': passwordConfirm,
     };
   }
+
   String toJson() => json.encode(toMap());
 }

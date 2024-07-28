@@ -12,6 +12,7 @@ import '../../../domain/usecase/shopper.dart';
 
 part 'post_put_delet_shopper_event.dart';
 part 'post_put_delet_shopper_state.dart';
+
 class PostPutDeletShopperBloc
     extends Bloc<PostPutDeletShopperEvent, PostPutDeletShopperState> {
   LoginShopperUseCase loginShopperUseCase;
@@ -39,13 +40,14 @@ class PostPutDeletShopperBloc
       } else if (event is RegisterShopperEvent) {
         emit(LoadingPostPutDeletShopperState());
 
-        final failureOrDoneMessage = await registerShopperUseCase(event.shopper);
+        final failureOrDoneMessage =
+            await registerShopperUseCase(event.shopper);
 
         emit(
           _eitherDoneMessageOrErrorState(
               failureOrDoneMessage, UPDATE_SUCCESS_MESSAGE),
         );
-      }else if (event is UpdateShopperEvent) {
+      } else if (event is UpdateShopperEvent) {
         emit(LoadingPostPutDeletShopperState());
 
         final failureOrDoneMessage = await updataShopperUseCase(event.shopper);

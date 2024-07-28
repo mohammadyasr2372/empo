@@ -6,16 +6,16 @@ import '../network/network_info.dart';
 
 typedef Future<Unit> FunctionUseMassege();
 
-Future<Either<Failure, Unit>> getMessage(NetworkInfo networkInfo ,
-      FunctionUseMassege functionUseMassege) async {
-    if (await networkInfo.isConnected) {
-      try {
-        await functionUseMassege();
-        return const Right(unit);
-      } on ServerException {
-        return Left(ServerFailure());
-      }
-    } else {
-      return Left(OfflineFailure());
+Future<Either<Failure, Unit>> getMessage(
+    NetworkInfo networkInfo, FunctionUseMassege functionUseMassege) async {
+  if (await networkInfo.isConnected) {
+    try {
+      await functionUseMassege();
+      return const Right(unit);
+    } on ServerException {
+      return Left(ServerFailure());
     }
+  } else {
+    return Left(OfflineFailure());
   }
+}

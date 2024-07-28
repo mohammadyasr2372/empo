@@ -6,7 +6,7 @@ import '../../domain/entities/shopper_entity.dart';
 
 class ShopperModel extends Shopper {
   const ShopperModel({
-    String? event_name,
+    String? event_type,
     String? name,
     String? email,
     String? mobile,
@@ -19,7 +19,7 @@ class ShopperModel extends Shopper {
     String? newpassword,
     String? passwordConfirm,
   }) : super(
-            event_name: event_name,
+            event_type: event_type,
             name: name,
             email: email,
             mobile: mobile,
@@ -35,7 +35,7 @@ class ShopperModel extends Shopper {
   @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'event_name': event_name,
+      'event_type': event_type,
       'name': name,
       'email': email,
       'mobile': mobile,
@@ -52,8 +52,8 @@ class ShopperModel extends Shopper {
 
   factory ShopperModel.fromMap(Map<String, dynamic> map) {
     return ShopperModel(
-      event_name:
-          map['event_name'] != null ? map['event_name'] as String : null,
+      event_type:
+          map['event_type'] != null ? map['event_type'] as String : null,
       name: map['name'] != null ? map['name'] as String : null,
       email: map['email'] != null ? map['email'] as String : null,
       mobile: map['mobile'] != null ? map['mobile'] as String : null,

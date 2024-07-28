@@ -125,24 +125,33 @@ class ShopperApiServiceIpml implements ShopperApiService {
 
   @override
   Future<Unit> loginShopper({required Shopper newShopper}) async {
-    final response =
-        await dio.post("$BASE_URL/posts/", data: newShopper.toJson());
+    try {
+      final response = await dio.post("$BASE_URL/api/shopper/loginshopper",
+          data: newShopper.toJson());
 
-    if (response.statusCode == 200) {
-      return Future.value(unit);
-    } else {
+      if (response.statusCode == 200) {
+        return Future.value(unit);
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }
 
   @override
   Future<Unit> registerShopper({required Shopper newShopper}) async {
-    final response =
-        await dio.post("$BASE_URL/posts/", data: newShopper.toJson());
+    try {
+      print(newShopper.toJson());
+      final response = await dio.post("$BASE_URL/api/shopper/registershopper",
+          data: newShopper.toJson());
 
-    if (response.statusCode == 200) {
-      return Future.value(unit);
-    } else {
+      if (response.statusCode == 200) {
+        return Future.value(unit);
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }

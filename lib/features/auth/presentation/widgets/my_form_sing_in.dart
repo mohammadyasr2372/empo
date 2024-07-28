@@ -57,7 +57,8 @@ class MyFormSingIn extends StatelessWidget {
                         (route) => false);
                   } else if (state is ErrorPostPutDeletUserState) {
                     SnackBarMessage().showErrorSnackBar(
-                        message: state.message, context: context);
+                        message: 'Email and Password is Incorrect...!',
+                        context: context);
                   }
                 },
                 builder: (context, state) {
@@ -88,7 +89,8 @@ class MyFormSingIn extends StatelessWidget {
                         (route) => false);
                   } else if (state is ErrorPostPutDeletShopperState) {
                     SnackBarMessage().showErrorSnackBar(
-                        message: state.message, context: context);
+                        message: 'Email and Password is Incorrect...!',
+                        context: context);
                   }
                 },
                 builder: (context, state) {

@@ -28,6 +28,16 @@ class MyFormSingUp extends StatelessWidget {
       key: formSignupKey,
       child: Column(children: [
         TextFromFieldForAuth(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter Email';
+            } else if (!RegExp(
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                .hasMatch(value)) {
+              return "it is not email";
+            }
+            return null;
+          },
           icon: const Icon(Icons.email),
           title: 'Email Address',
           hintText: 'Enter your email',
@@ -64,6 +74,18 @@ class MyFormSingUp extends StatelessWidget {
           obscureText: false,
         ),
         TextFromFieldForAuth(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter Password';
+            } else if (password.text.length < 8) {
+              return 'the password is short';
+            } else if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
+                .hasMatch(value)) {
+              return 'the password need char smoll,capital,num';
+              // return "Success";
+            }
+            return null;
+          },
           icon: const Icon(Icons.lock),
           title: 'Password',
           hintText: 'Enter your password',
@@ -101,7 +123,7 @@ class MyFormSingUp extends StatelessWidget {
                         (route) => false);
                   } else if (state is ErrorPostPutDeletUserState) {
                     SnackBarMessage().showErrorSnackBar(
-                        message: state.message, context: context);
+                        message: 'email Already Exists!', context: context);
                   }
                 },
                 builder: (context, state) {
@@ -135,7 +157,7 @@ class MyFormSingUp extends StatelessWidget {
                         (route) => false);
                   } else if (state is ErrorPostPutDeletShopperState) {
                     SnackBarMessage().showErrorSnackBar(
-                        message: state.message, context: context);
+                        message: 'email Already Exists!', context: context);
                   }
                 },
                 builder: (context, state) {
@@ -151,7 +173,7 @@ class MyFormSingUp extends StatelessWidget {
                                   shopper: Shopper(
                                       mobile: mobile.text,
                                       name: name.text,
-                                      event_name: selectedValue,
+                                      event_type: selectedValue,
                                       password: password.text,
                                       email: email.text)));
                         }

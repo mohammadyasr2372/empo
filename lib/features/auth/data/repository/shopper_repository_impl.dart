@@ -105,7 +105,7 @@ class ShopperRepositoryImpl implements ShopperRepository {
   Future<Either<Failure, Unit>> loginShopper(
       {required Shopper newShopper}) async {
     return await getMessage(networkInfo, () {
-      return shopperApiService.updateProShopper(newShopper: newShopper);
+      return shopperApiService.loginShopper(newShopper: newShopper);
     });
   }
 
@@ -113,7 +113,7 @@ class ShopperRepositoryImpl implements ShopperRepository {
   Future<Either<Failure, Unit>> registerShopper(
       {required Shopper newShopper}) async {
     return await getMessage(networkInfo, () {
-      return shopperApiService.updateProShopper(newShopper: newShopper);
+      return shopperApiService.registerShopper(newShopper: newShopper);
     });
   }
 

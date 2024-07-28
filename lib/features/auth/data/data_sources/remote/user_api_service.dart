@@ -64,24 +64,32 @@ class UserApiServiceIpml implements UserApiService {
 
   @override
   Future<Unit> login({required User newUser}) async {
-    final response = await dio.post("$BASE_URL/api/login", data: newUser.toJson());
+    try {
+      final response =
+          await dio.post("$BASE_URL/api/login", data: newUser.toJson());
 
-    if (response.statusCode == 200) {
-      return Future.value(unit);
-    } else {
+      if (response.statusCode == 200) {
+        return Future.value(unit);
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }
 
   @override
   Future<Unit> register({required User newUser}) async {
-    print( newUser.toJson());
-    final response = await dio.post('$BASE_URL/api/register', data: newUser.toJson());
-    print("aawcacac");
+    try {
+      final response =
+          await dio.post('$BASE_URL/api/register', data: newUser.toJson());
 
-    if (response.statusCode == 200) {
-      return Future.value(unit);
-    } else {
+      if (response.statusCode == 200) {
+        return Future.value(unit);
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
       throw ServerException();
     }
   }

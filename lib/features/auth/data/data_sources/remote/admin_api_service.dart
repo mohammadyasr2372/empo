@@ -163,7 +163,8 @@ class _AdminApiService implements AdminApiService {
 
   @override
   Future<Unit> loginAdmin({required Admin newAdmin}) async {
-    final response = await dio.post("$BASE_URL/posts/", data: newAdmin.toJson());
+    final response =
+        await dio.post("$BASE_URL/posts/", data: newAdmin.toJson());
 
     if (response.statusCode == 200) {
       return Future.value(unit);
