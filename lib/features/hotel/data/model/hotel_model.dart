@@ -10,7 +10,7 @@ class HotelModel extends Hotel {
     String? email,
     String? mobile,
     String? password,
-    String? image,
+    List<String>? image,
   }) : super(
           name: name,
           email: email,
@@ -36,7 +36,9 @@ class HotelModel extends Hotel {
       email: map['email'] != null ? map['email'] as String : null,
       mobile: map['mobile'] != null ? map['mobile'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
-      image: map['image'] != null ? map['image'] as String : null,
+      image: map['image'] != null
+          ? List<String>.from((map['image'] as List<String>))
+          : null,
     );
   }
 
