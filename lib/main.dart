@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:party/features/auth/presentation/bloc/get_user/get_user_bloc.dart';
 import 'package:party/features/auth/presentation/bloc/post_put_delet_user/post_put_delet_user_bloc.dart';
+import 'package:party/features/auth/presentation/pages/login_screen.dart';
 import 'package:party/features/hotel/presentation/pages/hotel/post_hotel/hotel_post.dart';
 import 'core/app_theme.dart';
 import 'features/auth/presentation/bloc/post_put_delet_shopper/post_put_delet_shopper_bloc.dart';
@@ -28,6 +29,6 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: appTheme,
             title: 'Posts App',
-            home: const PostHotel()));
+            home: const LoginPage()));
   }
 }

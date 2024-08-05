@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_mobileentifier_names, non_constant_identifier_names
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 
@@ -9,13 +10,13 @@ class Room extends Equatable {
   final String? name_room;
   final String? price_day;
   final String? room_type;
-  final String? image;
+  final List<File>? image_room;
   const Room({
     this.hotelId,
     this.name_room,
     this.price_day,
     this.room_type,
-    this.image,
+    this.image_room,
   });
 
   @override
@@ -25,7 +26,7 @@ class Room extends Equatable {
       name_room,
       price_day,
       room_type,
-      image,
+      image_room,
     ];
   }
 
@@ -35,7 +36,7 @@ class Room extends Equatable {
       'name_room': name_room,
       'price_day': price_day,
       'room_type': room_type,
-      'image': image,
+      'image_room': image_room,
     };
   }
 
@@ -45,7 +46,9 @@ class Room extends Equatable {
       name_room: map['name_room'] != null ? map['name_room'] as String : null,
       price_day: map['price_day'] != null ? map['price_day'] as String : null,
       room_type: map['room_type'] != null ? map['room_type'] as String : null,
-      image: map['image'] != null ? map['image'] as String : null,
+      image_room: map['image'] != null
+          ? List<File>.from((map['image'] as List<File>))
+          : null,
     );
   }
 

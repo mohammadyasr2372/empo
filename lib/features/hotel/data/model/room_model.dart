@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, use_super_parameters
 
 import 'dart:convert';
+import 'dart:io';
 
 import '../../domain/entities/room_entity.dart';
 
@@ -10,13 +11,13 @@ class RoomModel extends Room {
     String? name_room,
     String? price_day,
     String? room_type,
-    String? image,
+    List<File>? image_room,
   }) : super(
           hotelId: hotelId,
           name_room: name_room,
           price_day: price_day,
           room_type: room_type,
-          image: image,
+          image_room: image_room,
         );
 
   @override
@@ -26,7 +27,7 @@ class RoomModel extends Room {
       'name_room': name_room,
       'price_day': price_day,
       'room_type': room_type,
-      'image': image,
+      'image_room': image_room,
     };
   }
 
@@ -36,7 +37,9 @@ class RoomModel extends Room {
       name_room: map['name_room'] != null ? map['name_room'] as String : null,
       price_day: map['price_day'] != null ? map['price_day'] as String : null,
       room_type: map['room_type'] != null ? map['room_type'] as String : null,
-      image: map['image'] != null ? map['image'] as String : null,
+      image_room: map['image'] != null
+          ? List<File>.from((map['image'] as List<File>))
+          : null,
     );
   }
 

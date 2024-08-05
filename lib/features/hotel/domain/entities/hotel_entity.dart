@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_mobileentifier_names, non_constant_identifier_names, file_names
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 
@@ -11,7 +12,7 @@ class Hotel extends Equatable {
   final String? email;
   final String? mobile;
   final String? password;
-  final List<String>? image;
+  final List<File>? image;
   final List<Room>? rooms;
   const Hotel({
     this.name,
@@ -27,7 +28,7 @@ class Hotel extends Equatable {
     String? email,
     String? mobile,
     String? password,
-    List<String>? image,
+    List<File>? image,
     List<Room>? rooms,
   }) {
     return Hotel(
@@ -58,7 +59,7 @@ class Hotel extends Equatable {
       mobile: map['mobile'] != null ? map['mobile'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
       image: map['image'] != null
-          ? List<String>.from((map['image'] as List<String>))
+          ? List<File>.from((map['image'] as List<File>))
           : null,
       rooms: map['rooms'] != null
           ? List<Room>.from(

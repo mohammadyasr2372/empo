@@ -13,6 +13,8 @@ import 'package:party/features/auth/presentation/widgets/button.dart';
 import 'package:party/features/auth/presentation/widgets/drop_down_item_event_type.dart';
 import 'package:party/features/auth/presentation/widgets/text_from_feald_auth.dart';
 
+import '../../../hotel/presentation/pages/hotel/post_hotel/hotel_post.dart';
+
 TextEditingController email = TextEditingController();
 TextEditingController name = TextEditingController();
 TextEditingController mobile = TextEditingController();
@@ -155,7 +157,7 @@ class MyFormSingUp extends StatelessWidget {
                     SnackBarMessage().showSuccessSnackBar(
                         message: state.message, context: context);
                     Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (_) => Scaffold()),
+                        MaterialPageRoute(builder: (_) => PostHotel()),
                         (route) => false);
                   } else if (state is ErrorPostPutDeletShopperState) {
                     SnackBarMessage().showErrorSnackBar(

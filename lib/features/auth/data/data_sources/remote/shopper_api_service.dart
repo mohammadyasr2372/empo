@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:party/features/auth/data/model/shopper_model.dart';
+import 'package:party/injection_container.dart' as di;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
@@ -130,6 +132,9 @@ class ShopperApiServiceIpml implements ShopperApiService {
           data: newShopper.toJson());
 
       if (response.statusCode == 200) {
+        di.sl
+            .get<SharedPreferences>()
+            .setString(CACHED_Token, response.data['RefreshToken']);
         return Future.value(unit);
       } else {
         throw ServerException();
@@ -146,6 +151,9 @@ class ShopperApiServiceIpml implements ShopperApiService {
           data: newShopper.toJson());
 
       if (response.statusCode == 200) {
+        di.sl
+            .get<SharedPreferences>()
+            .setString(CACHED_Token, response.data['RefreshToken']);
         return Future.value(unit);
       } else {
         throw ServerException();

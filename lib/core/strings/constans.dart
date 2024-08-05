@@ -3,6 +3,8 @@
 const BASE_URL = 'http://localhost:3000';
 const CACHED_PRO_USER = "CACHED_PRO_USER";
 const CACHED_PRO_Shopper = "CACHED_PRO_Shopper";
+const CACHED_Token = "CACHED_Token";
+const CACHED_ID_hotel = "CACHED_ID_hotel";
 const CACHED_PRO_Admin = "CACHED_PRO_Admin";
 const IMAGE_BAGRAOUND = "assets/image/photo.jpg";
 late double width;

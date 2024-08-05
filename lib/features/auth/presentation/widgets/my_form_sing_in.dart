@@ -11,6 +11,7 @@ import 'package:party/features/auth/presentation/bloc/post_put_delet_user/post_p
 import 'package:party/features/auth/presentation/pages/sing_up_page.dart';
 import 'package:party/features/auth/presentation/widgets/button.dart';
 import 'package:party/features/auth/presentation/widgets/text_from_feald_auth.dart';
+import 'package:party/features/hotel/presentation/pages/hotel/post_hotel/hotel_post.dart';
 
 TextEditingController emailLog = TextEditingController();
 TextEditingController passwordLog = TextEditingController();
@@ -87,7 +88,7 @@ class MyFormSingIn extends StatelessWidget {
                     SnackBarMessage().showSuccessSnackBar(
                         message: state.message, context: context);
                     Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (_) => Scaffold()),
+                        MaterialPageRoute(builder: (_) => PostHotel()),
                         (route) => false);
                   } else if (state is ErrorPostPutDeletShopperState) {
                     SnackBarMessage().showErrorSnackBar(

@@ -621,7 +621,7 @@ class _MainScreenState extends State<MainScreen> {
   static const List<Widget> _screens = [
     HomeScreen(),
     // Searchpage(),
-    HotelPage(),
+    // HotelPage(),
     AccountScreen(),
     ProfileScreen(),
   ];

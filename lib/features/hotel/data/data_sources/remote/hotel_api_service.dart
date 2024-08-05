@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:party/features/hotel/data/model/hotel_model.dart';
+import 'package:party/injection_container.dart' as di;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
@@ -61,8 +63,13 @@ class HotelApiServiceIpml implements HotelApiService {
   @override
   Future<Unit> add_hotelInfo({required Hotel newHotel}) async {
     try {
-      final response =
-          await dio.post("$BASE_URL/api/login", data: newHotel.toJson());
+      final response = await dio.post("$BASE_URL/api/shopper/add_hotelInfo",
+          data: newHotel.toJson(),
+          options: Options(headers: {
+            'token': di.sl.get<SharedPreferences>().getString(CACHED_Token),
+            "Content-Type": "application/json",
+            "Access-Control_Allow_Origin": "*"
+          }));
 
       if (response.statusCode == 200) {
         return Future.value(unit);

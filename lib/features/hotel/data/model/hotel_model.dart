@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, use_super_parameters
 
 import 'dart:convert';
+import 'dart:io';
 
 import '../../domain/entities/hotel_entity.dart';
 
@@ -10,7 +11,7 @@ class HotelModel extends Hotel {
     String? email,
     String? mobile,
     String? password,
-    List<String>? image,
+    List<File>? image,
   }) : super(
           name: name,
           email: email,
@@ -37,7 +38,7 @@ class HotelModel extends Hotel {
       mobile: map['mobile'] != null ? map['mobile'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
       image: map['image'] != null
-          ? List<String>.from((map['image'] as List<String>))
+          ? List<File>.from((map['image'] as List<File>))
           : null,
     );
   }
