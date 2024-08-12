@@ -1,9 +1,14 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+// import 'package:party/features/hotel/presentation/pages/hotel/post_hotel/hotel_post.dart';
+import 'package:party/injection_container.dart' as di;
+import 'package:http/http.dart' as http;
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
@@ -45,18 +50,41 @@ class RoomApiServiceIpml implements RoomApiService {
 
   @override
   Future<Unit> addRoom({required Room newRoom}) async {
-    try {
-      final response =
-          await dio.post("$BASE_URL/api/login", data: newRoom.toJson());
+    final request = http.MultipartRequest(
+        'POST', _getUri('http://localhost:3000/api/shopper/addRoom'));
+    request.headers['token'] =
+        di.sl.get<SharedPreferences>().getString(CACHED_Token)!;
 
-      if (response.statusCode == 200) {
-        return Future.value(unit);
-      } else {
-        throw ServerException();
-      }
-    } catch (e) {
-      throw ServerException();
+    for (final imagePath in newRoom.image_room!) {
+      final file = File(imagePath.path);
+      request.files.add(await http.MultipartFile.fromPath(
+        'image_room',
+        imagePath.path,
+        filename: file.path.split('/').last,
+        contentType: MediaType('image', 'png'),
+      ));
     }
+
+    request.fields.addAll({
+      'hotelId': di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!,
+      'name_room': newRoom.name_room!,
+      'price_day': newRoom.price_day!,
+      'room_type': newRoom.room_type!
+    });
+
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      print('File upload successful ');
+
+      final responseBody = await response.stream.bytesToString();
+      final data = json.decode(responseBody);
+      print(data);
+    } else {
+      print('File upload failed with status code: ${response.statusCode}');
+      print(
+          'File upload failed with status code: ${await response.stream.bytesToString()}');
+    }
+    return Future.value(unit);
   }
 
   @override
@@ -179,4 +207,11 @@ class RoomApiServiceIpml implements RoomApiService {
       throw ServerException();
     }
   }
+
+  Uri _getUri(String url) {
+    return Uri.parse(url);
+  }
 }
+
+
+//  {"success":false,"message":"Cannot read properties of undefined (reading 'map')"}

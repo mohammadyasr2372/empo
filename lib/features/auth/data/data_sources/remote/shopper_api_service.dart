@@ -1,10 +1,13 @@
 // ignore_for_file: unused_element
 
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:party/features/auth/data/model/shopper_model.dart';
+import 'package:party/features/auth/presentation/pages/add_info_shopper.dart';
 import 'package:party/injection_container.dart' as di;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,10 +15,12 @@ import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
 import '../../../domain/entities/shopper_entity.dart';
 import '../../model/get_location_shopper.dart';
+import '../../model/post_info_shoppper.dart';
 
 abstract class ShopperApiService {
   Future<Unit> loginShopper({required Shopper newShopper});
-  Future<Unit> updateProShopper({required Shopper newShopper});
+  Future<Unit> updateProShopper(
+      {required Shopper newShopper, required File image});
   Future<Shopper> getProShopper();
   Future<Unit> deleteShopper();
   Future<Unit> changeMyPasswordShopper({required Shopper newShopper});
@@ -23,6 +28,8 @@ abstract class ShopperApiService {
   Future<Unit> changeEventName({required String newEventName});
   Future<Shopper> informationDataWithEvent({required Shopper shopper});
   Future<Unit> registerShopper({required Shopper newShopper});
+  Future<Unit> AddInfoShopper(
+      {required PostInfoLocationShopper postInfoLocationShopper});
   Future<GetLocationShopper> getMylocation();
 }
 
@@ -130,11 +137,14 @@ class ShopperApiServiceIpml implements ShopperApiService {
     try {
       final response = await dio.post("$BASE_URL/api/shopper/loginshopper",
           data: newShopper.toJson());
-
+      print(response.data['RefreshToken']);
+      print(response.data);
       if (response.statusCode == 200) {
         di.sl
             .get<SharedPreferences>()
             .setString(CACHED_Token, response.data['RefreshToken']);
+        di.sl.get<SharedPreferences>().setString(
+            CACHED_TYPE_SHOPPER, response.data['CACHED_TYPE_SHOPPER']);
         return Future.value(unit);
       } else {
         throw ServerException();
@@ -149,11 +159,14 @@ class ShopperApiServiceIpml implements ShopperApiService {
     try {
       final response = await dio.post("$BASE_URL/api/shopper/registershopper",
           data: newShopper.toJson());
-
+      print(response.data['RefreshToken']);
+      print(response.data['shopper']['event_type']);
       if (response.statusCode == 200) {
         di.sl
             .get<SharedPreferences>()
             .setString(CACHED_Token, response.data['RefreshToken']);
+        di.sl.get<SharedPreferences>().setString(
+            CACHED_TYPE_SHOPPER, response.data['shopper']['event_type']);
         return Future.value(unit);
       } else {
         throw ServerException();
@@ -164,14 +177,90 @@ class ShopperApiServiceIpml implements ShopperApiService {
   }
 
   @override
-  Future<Unit> updateProShopper({required Shopper newShopper}) async {
-    final response =
-        await dio.put("$BASE_URL/posts/", data: newShopper.toJson());
+  Future<Unit> updateProShopper(
+      {required Shopper newShopper, required File image}) async {
+    final request = http.MultipartRequest(
+        'POST', _getUri('http://localhost:3000/api/shopper/data_with_event'));
+    request.headers['token'] =
+        di.sl.get<SharedPreferences>().getString(CACHED_Token)!;
 
+    final file = File(image.path);
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      image.path,
+      filename: file.path.split('/').last,
+      contentType: MediaType('image', 'png'),
+    ));
+
+    request.fields.addAll({
+      'event_name': newShopper.event_type!,
+      'location1': newShopper.location!,
+      'location2': newShopper.is_verified!.toString(),
+      'city': newShopper.email!
+    });
+
+    final response = await request.send();
     if (response.statusCode == 200) {
-      return Future.value(unit);
+      print('File upload successful ');
+
+      final responseBody = await response.stream.bytesToString();
+      final data = json.decode(responseBody);
+      print(data);
     } else {
-      throw ServerException();
+      print('File upload failed with status code: ${response.statusCode}');
+      print(
+          'File upload failed with status code: ${await response.stream.bytesToString()}');
     }
+    return Future.value(unit);
+    // final response =
+    //     await dio.post("http://localhost:3000/api/shopper/data_with_event", data: newShopper.toJson());
+
+    // if (response.statusCode == 200) {
+    //   return Future.value(unit);
+    // } else {
+    //   throw ServerException();
+    // }
+  }
+
+  Uri _getUri(String url) {
+    return Uri.parse(url);
+  }
+
+  @override
+  Future<Unit> AddInfoShopper(
+      {required PostInfoLocationShopper postInfoLocationShopper}) async {
+    final request = http.MultipartRequest(
+        'POST', _getUri('http://localhost:3000/api/shopper/data_with_event'));
+    request.headers['token'] =
+        di.sl.get<SharedPreferences>().getString(CACHED_Token)!;
+
+    final file = File(postInfoLocationShopper.image.path);
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      postInfoLocationShopper.image.path,
+      filename: file.path.split('/').last,
+      contentType: MediaType('image', 'png'),
+    ));
+
+    request.fields.addAll({
+      'event_name': postInfoLocationShopper.Name,
+      'location1': postInfoLocationShopper.location1.toString(),
+      'location2': postInfoLocationShopper.location2.toString(),
+      'city': postInfoLocationShopper.city
+    });
+
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      print('File upload successful ');
+
+      final responseBody = await response.stream.bytesToString();
+      final data = json.decode(responseBody);
+      print(data);
+    } else {
+      print('File upload failed with status code: ${response.statusCode}');
+      print(
+          'File upload failed with status code: ${await response.stream.bytesToString()}');
+    }
+    return Future.value(unit);
   }
 }

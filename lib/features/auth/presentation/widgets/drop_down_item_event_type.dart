@@ -38,31 +38,5 @@ class _DropDownItemEventState extends State<DropDownItemEvent> {
   }
 }
 
-List<String> itemList = ['Wedding Hall', 'Hotal', 'Restorant'];
+List<String> itemList = ['Wedding Hall', 'Hotal', 'Restorant', 'Cadies shop'];
 String? selectedValue = itemList.first;
-// List<DropdownMenuItem<String>> dropdownItems = [
-//   const DropdownMenuItem(
-//     value: 'Wedding Hall',
-//     child: Text('Wedding Hall'),
-//   ),
-//   const DropdownMenuItem(
-//     value: 'Candies shop',
-//     child: Text('Candies shop'),
-//   ),
-//   const DropdownMenuItem(
-//     value: 'Decoration shop',
-//     child: Text('Decoration shop'),
-//   ),
-//   const DropdownMenuItem(
-//     value: 'Hotal',
-//     child: Text('Hotal'),
-//   ),
-//   const DropdownMenuItem(
-//     value: 'Car rental shop',
-//     child: Text('Car rental shop'),
-//   ),
-//   const DropdownMenuItem(
-//     value: 'Restorant',
-//     child: Text('Restorant'),
-//   ),
-// ];

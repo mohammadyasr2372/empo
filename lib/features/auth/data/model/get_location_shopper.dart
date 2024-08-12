@@ -35,18 +35,18 @@ class GetLocationShopper {
 
   String toJson() => json.encode(toMap());
 
-  factory GetLocationShopper.fromJson(String source) => GetLocationShopper.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory GetLocationShopper.fromJson(String source) =>
+      GetLocationShopper.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'GetLocationShopper(location1: $location1, location2: $location2)';
+  String toString() =>
+      'GetLocationShopper(location1: $location1, location2: $location2)';
 
   @override
   bool operator ==(covariant GetLocationShopper other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.location1 == location1 &&
-      other.location2 == location2;
+
+    return other.location1 == location1 && other.location2 == location2;
   }
 
   @override

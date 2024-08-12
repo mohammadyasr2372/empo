@@ -1,14 +1,22 @@
 // ignore_for_file: prefer_final_fields, library_private_types_in_public_api, use_super_parameters
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:party/features/hotel/data/data_sources/remote/hotel_api_service.dart';
+import 'package:party/features/hotel/data/data_sources/remote/room_api_service.dart';
+import 'package:party/features/hotel/data/data_sources/remote/widd_api_service.dart';
 import 'package:party/features/hotel/domain/entities/hotel_entity.dart';
 import 'package:party/features/hotel/domain/entities/room_entity.dart';
-import 'package:party/injection_container.dart';
+import 'package:party/features/hotel/domain/entities/widd_hotel_post.dart';
+import 'package:party/injection_container.dart' as di;
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../../../core/strings/constans.dart';
+import '../../../../../../injection_container.dart';
 import 'image_slider.dart';
 import 'room_section_post.dart';
 
@@ -21,6 +29,7 @@ class PostHotel extends StatefulWidget {
 
 class _PostHotelState extends State<PostHotel> {
   final PageController _pageController = PageController(initialPage: 0);
+  final PageController _WiddController = PageController(initialPage: 0);
   final PageController _vipRoomPageController =
       PageController(initialPage: 0, viewportFraction: 0.8);
   final PageController _superDeluxeRoomPageController =
@@ -30,17 +39,27 @@ class _PostHotelState extends State<PostHotel> {
   final ImagePicker _picker = ImagePicker();
   List<File> _hotelImages = [];
   List<File> _vipRoomImages = [];
+  List<Uint8List> imageRoomVip = [];
   List<File> _superDeluxeRoomImages = [];
   List<File> _deluxeRoomImages = [];
+  List<File> _WiddHotalImages = [];
   late Timer _timer;
   int _activePage = 0;
 
+  final TextEditingController _NameWiddinController = TextEditingController();
+  final TextEditingController _bookpriceController = TextEditingController();
+  final TextEditingController _capacityController = TextEditingController();
+  final TextEditingController _personbookController = TextEditingController();
+  final TextEditingController _capacityMinController = TextEditingController();
+
   final TextEditingController _vipRoomPriceController = TextEditingController();
   final TextEditingController _vipRoomnameController = TextEditingController();
+
   final TextEditingController _superDeluxeRoomPriceController =
       TextEditingController();
   final TextEditingController _superDeluxeRoomnameController =
       TextEditingController();
+
   final TextEditingController _deluxeRoomPriceController =
       TextEditingController();
   final TextEditingController _deluxeRoomnameController =
@@ -130,32 +149,54 @@ class _PostHotelState extends State<PostHotel> {
               nameController: _deluxeRoomnameController,
               onAddImage: () => _pickImage(imageList: _deluxeRoomImages),
             ),
+            const SizedBox(height: 10),
+            WiddSectionPost(
+              title: 'Widd Hotal',
+              images: _WiddHotalImages,
+              pageController: _WiddController,
+              NameWiddinController: _NameWiddinController,
+              bookpriceController: _bookpriceController,
+              onAddImage: () => _pickImage(imageList: _WiddHotalImages),
+              capacityController: _capacityController,
+              personbookController: _personbookController,
+              capacityMinController: _capacityMinController,
+            ),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  await sl<HotelApiService>()
-                      .add_hotelInfo(newHotel: Hotel(image: _hotelImages));
-                  print(_hotelImages);
-                  print(Room(
+                  await sl<HotelApiService>().add_hotelInfo(
+                      newHotel: Hotel(imagesHotel: _hotelImages));
+                  await sl<RoomApiService>().addRoom(
+                      newRoom: Room(
                     room_type: 'vip',
                     price_day: _vipRoomPriceController.text,
                     name_room: _vipRoomnameController.text,
                     image_room: _vipRoomImages,
                   ));
-                  print(Room(
+                  await sl<RoomApiService>().addRoom(
+                      newRoom: Room(
                     room_type: 'Delocs',
                     price_day: _deluxeRoomPriceController.text,
                     name_room: _deluxeRoomnameController.text,
                     image_room: _deluxeRoomImages,
                   ));
-                  print(Room(
+                  await sl<RoomApiService>().addRoom(
+                      newRoom: Room(
                     room_type: 'superDelocs',
                     price_day: _superDeluxeRoomPriceController.text,
                     name_room: _superDeluxeRoomnameController.text,
                     image_room: _superDeluxeRoomImages,
                   ));
+                  await sl<WiddApiService>().addWidd(
+                      newWidd: WiddHotelPost(
+                          hotelId: _NameWiddinController.text,
+                          bookprice: _bookpriceController.text,
+                          capacity: _capacityController.text,
+                          personbook: _personbookController.text,
+                          capacityMin: _capacityMinController.text,
+                          imagewids_hotal: _WiddHotalImages));
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize:

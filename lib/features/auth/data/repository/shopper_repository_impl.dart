@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:party/core/error/failures.dart';
 import 'package:party/features/auth/data/model/get_location_shopper.dart';
@@ -32,7 +34,10 @@ class ShopperRepositoryImpl implements ShopperRepository {
   Future<Either<Failure, Unit>> changeMyPasswordShopper(
       {required Shopper newShopper}) async {
     return await getMessage(networkInfo, () {
-      return shopperApiService.updateProShopper(newShopper: newShopper);
+      return shopperApiService.updateProShopper(
+        image: File('path'),
+        newShopper: newShopper,
+      );
     });
   }
 
@@ -121,7 +126,7 @@ class ShopperRepositoryImpl implements ShopperRepository {
   Future<Either<Failure, Unit>> updateProShopper(
       {required Shopper newShopper}) async {
     return await getMessage(networkInfo, () {
-      return shopperApiService.updateProShopper(newShopper: newShopper);
+      return shopperApiService.loginShopper(newShopper: newShopper);
     });
   }
 }

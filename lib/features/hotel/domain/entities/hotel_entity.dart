@@ -12,14 +12,14 @@ class Hotel extends Equatable {
   final String? email;
   final String? mobile;
   final String? password;
-  final List<File>? image;
+  final List<File>? imagesHotel;
   final List<Room>? rooms;
   const Hotel({
     this.name,
     this.email,
     this.mobile,
     this.password,
-    this.image,
+    this.imagesHotel,
     this.rooms,
   });
 
@@ -28,7 +28,7 @@ class Hotel extends Equatable {
     String? email,
     String? mobile,
     String? password,
-    List<File>? image,
+    List<File>? imagesHotel,
     List<Room>? rooms,
   }) {
     return Hotel(
@@ -36,7 +36,7 @@ class Hotel extends Equatable {
       email: email ?? this.email,
       mobile: mobile ?? this.mobile,
       password: password ?? this.password,
-      image: image ?? this.image,
+      imagesHotel: imagesHotel ?? this.imagesHotel,
       rooms: rooms ?? this.rooms,
     );
   }
@@ -47,7 +47,7 @@ class Hotel extends Equatable {
       'email': email,
       'mobile': mobile,
       'password': password,
-      'image': image,
+      'imagesHotel': imagesHotel,
       'rooms': rooms?.map((x) => x.toMap()).toList(),
     };
   }
@@ -58,8 +58,8 @@ class Hotel extends Equatable {
       email: map['email'] != null ? map['email'] as String : null,
       mobile: map['mobile'] != null ? map['mobile'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
-      image: map['image'] != null
-          ? List<File>.from((map['image'] as List<File>))
+      imagesHotel: map['imagesHotel'] != null
+          ? List<File>.from((map['imagesHotel'] as List<File>))
           : null,
       rooms: map['rooms'] != null
           ? List<Room>.from(
@@ -86,7 +86,7 @@ class Hotel extends Equatable {
       email,
       mobile,
       password,
-      image,
+      imagesHotel,
       rooms,
     ];
   }

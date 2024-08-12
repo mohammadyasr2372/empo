@@ -11,13 +11,13 @@ class HotelModel extends Hotel {
     String? email,
     String? mobile,
     String? password,
-    List<File>? image,
+    List<File>? imagesHotel,
   }) : super(
           name: name,
           email: email,
           mobile: mobile,
           password: password,
-          image: image,
+          imagesHotel: imagesHotel,
         );
 
   @override
@@ -27,7 +27,7 @@ class HotelModel extends Hotel {
       'email': email,
       'mobile': mobile,
       'password': password,
-      'image': image,
+      'imagesHotel': imagesHotel,
     };
   }
 
@@ -37,8 +37,8 @@ class HotelModel extends Hotel {
       email: map['email'] != null ? map['email'] as String : null,
       mobile: map['mobile'] != null ? map['mobile'] as String : null,
       password: map['password'] != null ? map['password'] as String : null,
-      image: map['image'] != null
-          ? List<File>.from((map['image'] as List<File>))
+      imagesHotel: map['imagesHotel'] != null
+          ? List<File>.from((map['imagesHotel'] as List<File>))
           : null,
     );
   }

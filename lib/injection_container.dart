@@ -7,6 +7,8 @@ import 'package:party/features/auth/domain/usecase/user.dart';
 import 'package:party/features/auth/presentation/bloc/get_user/get_user_bloc.dart';
 import 'package:party/features/auth/presentation/bloc/post_put_delet_user/post_put_delet_user_bloc.dart';
 import 'package:party/features/hotel/data/data_sources/remote/hotel_api_service.dart';
+import 'package:party/features/hotel/data/data_sources/remote/room_api_service.dart';
+import 'package:party/features/hotel/data/data_sources/remote/widd_api_service.dart';
 
 import 'core/network/network_info.dart';
 import 'package:get_it/get_it.dart';
@@ -78,6 +80,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton<HotelApiService>(
       () => HotelApiServiceIpml(dio: sl()));
+  sl.registerLazySingleton<RoomApiService>(() => RoomApiServiceIpml(dio: sl()));
+  sl.registerLazySingleton<WiddApiService>(() => WiddApiServiceIpml(dio: sl()));
 
 //! Core
 
