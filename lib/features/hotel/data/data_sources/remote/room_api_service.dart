@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, avoid_print
 
 import 'dart:convert';
 import 'dart:io';
@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
 import '../../../domain/entities/room_entity.dart';
+import '../../model/image_room_model.dart';
 import '../../model/room_model.dart';
 
 abstract class RoomApiService {
@@ -25,6 +26,9 @@ abstract class RoomApiService {
   Future<List<Room>> getMyRoomsWithUser();
   Future<List<Room>> getRooms_notBooked();
   Future<Unit> ChangeStayRoom({required Room newRoom});
+  Future<List<ImageRoomModel>> getall_roomsWithsuperDelocs_shopper();
+  Future<List<ImageRoomModel>> getMyroomVip_shopper();
+  Future<List<ImageRoomModel>> getall_roomsWithDelocs_shopper();
 }
 
 class RoomApiServiceIpml implements RoomApiService {
@@ -50,8 +54,8 @@ class RoomApiServiceIpml implements RoomApiService {
 
   @override
   Future<Unit> addRoom({required Room newRoom}) async {
-    final request = http.MultipartRequest(
-        'POST', _getUri('http://localhost:3000/api/shopper/addRoom'));
+    final request =
+        http.MultipartRequest('POST', _getUri('$BASE_URL/api/shopper/addRoom'));
     request.headers['token'] =
         di.sl.get<SharedPreferences>().getString(CACHED_Token)!;
 
@@ -204,6 +208,85 @@ class RoomApiServiceIpml implements RoomApiService {
         throw ServerException();
       }
     } catch (e) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<ImageRoomModel>> getMyroomVip_shopper() async {
+    print(di.sl.get<SharedPreferences>().getString(CACHED_Token)!);
+    print(
+        "$BASE_URL/api/getMyroomVip_shopper/${di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!}");
+    final response = await dio.get(
+      "$BASE_URL/api/shopper/getMyroomVip_shopper/${di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!}",
+      options: Options(
+        headers: {
+          'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+          "Content-Type": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final List temp = response.data['imageRoom'] as List;
+      final List<ImageRoomModel> imageRoomModels = List.generate(temp.length,
+          (index) => ImageRoomModel.fromMap(response.data['imageRoom'][index]));
+
+      return imageRoomModels;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<ImageRoomModel>> getall_roomsWithsuperDelocs_shopper() async {
+    print(di.sl.get<SharedPreferences>().getString(CACHED_Token)!);
+    print(
+        "$BASE_URL/api/shopper/getall_roomsWithsuperDelocs_shopper/${di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!}");
+    final response = await dio.get(
+      "$BASE_URL/api/shopper/getall_roomsWithsuperDelocs_shopper/${di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!}",
+      options: Options(
+        headers: {
+          'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+          "Content-Type": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      print(response.data);
+      final List temp = response.data['imageRoom'] as List;
+      final List<ImageRoomModel> imageRoomModels = List.generate(temp.length,
+          (index) => ImageRoomModel.fromMap(response.data['imageRoom'][index]));
+
+      return imageRoomModels;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<ImageRoomModel>> getall_roomsWithDelocs_shopper() async {
+    final response = await dio.get(
+      "$BASE_URL/api/shopper/getall_roomsWithDelocs_shopper/${di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!}",
+      options: Options(
+        headers: {
+          'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+          "Content-Type": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final List temp = response.data['imageRoom'] as List;
+      final List<ImageRoomModel> imageRoomModels = List.generate(temp.length,
+          (index) => ImageRoomModel.fromMap(response.data['imageRoom'][index]));
+
+      return imageRoomModels;
+    } else {
       throw ServerException();
     }
   }

@@ -64,37 +64,6 @@ class HotelApiServiceIpml implements HotelApiService {
     }
   }
 
-  // @override
-  // Future<Unit> add_hotelInfo({required Hotel newHotel}) async {
-  //   // try {
-  //   final formData = FormData.fromMap({
-  //     'imagesHotel': newHotel.imagesHotel!
-  //         .map((file) => MultipartFile.fromFileSync(file.path))
-  //         .toList(),
-  //   });
-  //   print('Sending request...');
-  //   final response = await dio.post(
-  //     'http://localhost:3000/api/shopper/add_hotelInfo',
-  //     data: formData,
-  //     options: Options(
-  //       headers: {
-  //         'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)
-  //       },
-  //     ),
-  //   );
-  //   print('Response received:');
-  //   print(response.data);
-  //   if (response.statusCode == 200) {
-  //     print(response.data['ID']);
-
-  //     return Future.value(unit);
-  //   } else {
-  //     throw ServerException();
-  //   }
-  //   // } catch (e) {
-  //   //   throw ServerException();
-  //   // }
-  // }
   Uri _getUri(String url) {
     return Uri.parse(url);
   }
@@ -102,7 +71,7 @@ class HotelApiServiceIpml implements HotelApiService {
   @override
   Future<Unit> add_hotelInfo({required Hotel newHotel}) async {
     final request = http.MultipartRequest(
-        'POST', _getUri('http://localhost:3000/api/shopper/add_hotelInfo'));
+        'POST', _getUri('$BASE_URL/api/shopper/add_hotelInfo'));
     request.headers['token'] =
         di.sl.get<SharedPreferences>().getString(CACHED_Token)!;
 

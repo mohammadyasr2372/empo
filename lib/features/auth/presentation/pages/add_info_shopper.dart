@@ -1,16 +1,15 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable
+// ignore_for_file: prefer_const_constructors, must_be_immutable, use_build_context_synchronously
 
 // import 'dart:ffi';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 import 'package:party/core/strings/constans.dart';
 import 'package:party/features/auth/data/data_sources/remote/shopper_api_service.dart';
-import 'package:party/features/auth/domain/entities/shopper_entity.dart';
+import 'package:party/features/auth/data/model/post_info_shoppper.dart';
+import 'package:party/features/auth/presentation/pages/create_wallet.dart';
 import 'package:party/features/auth/presentation/widgets/button.dart';
 // import 'package:party/features/hotel/data/data_sources/remote/widd_api_service.dart';
 import 'package:party/injection_container.dart';
@@ -112,10 +111,6 @@ class _AddInfoShopperState extends State<AddInfoShopper> {
               city: city ?? '',
               longitude: longitude.toString(),
               latitude: latitude.toString()),
-
-          // Text(
-          //     'latitude :$latitude \n longitude :$longitude\n city :$city\n country :$country'),
-          // ,
           SizedBox(
             height: 20,
           ),
@@ -138,14 +133,16 @@ class _AddInfoShopperState extends State<AddInfoShopper> {
               child: ButtonAuth(
                   title: 'Save',
                   onPressed: () async {
-                    await sl<ShopperApiService>().updateProShopper(
-                        newShopper: Shopper(
-                          location: latitude.toString(),
-                          is_verified: longitude,
-                          event_type: nameEventcontroller!.text,
-                          email: city,
-                        ),
-                        image: _imageFile!);
+                    await sl<ShopperApiService>().AddInfoShopper(
+                      postInfoLocationShopper: PostInfoLocationShopper(
+                          location1: latitude!,
+                          location2: longitude!,
+                          Name: nameEventcontroller!.text,
+                          city: city ?? 'dammascus',
+                          image: _imageFile!),
+                    );
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => CreateWallet()));
                   },
                   width: width)),
         ],

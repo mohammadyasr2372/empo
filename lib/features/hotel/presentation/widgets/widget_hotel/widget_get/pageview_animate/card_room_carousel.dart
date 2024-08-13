@@ -1,6 +1,7 @@
 // ignore_for_file: use_super_parameters
 
 import 'package:flutter/material.dart';
+import 'package:party/core/strings/constans.dart';
 
 class RoomCarouselCard extends StatelessWidget {
   final String imagePath;
@@ -19,7 +20,7 @@ class RoomCarouselCard extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: AssetImage(imagePath),
+                  image: NetworkImage('$BASE_URL/${imagePath.split('/').last}'),
                   fit: BoxFit.cover,
                 ),
                 boxShadow: const [

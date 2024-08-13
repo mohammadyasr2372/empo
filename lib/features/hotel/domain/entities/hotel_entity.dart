@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 
 import 'room_entity.dart';
+import 'room_type.dart';
 
 class Hotel extends Equatable {
   final String? name;

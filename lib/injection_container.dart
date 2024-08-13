@@ -21,6 +21,7 @@ import 'features/auth/data/repository/shopper_repository_impl.dart';
 import 'features/auth/domain/repository/shopper_repository.dart';
 import 'features/auth/domain/usecase/shopper.dart';
 import 'features/auth/presentation/bloc/post_put_delet_shopper/post_put_delet_shopper_bloc.dart';
+import 'features/hotel/presentation/bloc/get_hotel/get_hotel_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -30,6 +31,7 @@ Future<void> init() async {
 // Bloc
 
   sl.registerFactory(() => GetUserBloc(getProUserUseCase: sl()));
+  sl.registerFactory(() => GetHotelBloc());
   sl.registerFactory(() => PostPutDeletUserBloc(
       loginUserUseCase: sl(),
       registerUserUseCase: sl(),

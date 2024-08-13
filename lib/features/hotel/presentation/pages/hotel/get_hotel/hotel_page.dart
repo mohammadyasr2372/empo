@@ -1,106 +1,58 @@
-// // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, library_private_types_in_public_api, non_constant_identifier_names
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 
-// import 'package:flutter/material.dart';
-// import '../../../../domain/entities/hotel_entity.dart';
-// import '../../../../domain/entities/room_entity.dart';
-// import '../../../widgets/BookingButton.dart';
-// import '../../../widgets/widget_hotel/widget_get/RoomSection.dart';
-// import 'HotelImagesSection.dart';
-// import 'InformationSection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:party/injection_container.dart' as di;
 
-// class HotelPage extends StatefulWidget {
-//   const HotelPage({super.key});
+import '../../../bloc/get_hotel/get_hotel_bloc.dart';
+import '../../../widgets/BookingButton.dart';
+import 'hotel_images_section.dart';
+import 'type_section.dart';
 
-//   @override
-//   _HotelPageState createState() => _HotelPageState();
-// }
+class HotelPage extends StatefulWidget {
+  const HotelPage({Key? key}) : super(key: key);
 
-// class _HotelPageState extends State<HotelPage> {
-//   late Hotel hotel;
-//   final List<String> vipRoomImages = [
-//     'assets/images/photo4.jpg',
-//     'assets/images/photo4.jpg',
-//     'assets/images/photo4.jpg',
-//   ];
+  @override
+  _HotelPageState createState() => _HotelPageState();
+}
 
-//   final List<String> deluxeRoomImages = [
-//     'assets/images/photo3.jpg',
-//     'assets/images/photo3.jpg',
-//     'assets/images/photo3.jpg',
-//   ];
-
-//   final List<String> superDeluxeRoomImages = [
-//     'assets/images/photo2.jpg',
-//     'assets/images/photo2.jpg',
-//     'assets/images/photo2.jpg',
-//   ];
-//   final List<String> hotel_Hall = [
-//     'assets/images/photo2.jpg',
-//     'assets/images/photo2.jpg',
-//     'assets/images/photo2.jpg',
-//   ];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     // Initialize the hotel data
-//     hotel = Hotel(
-//       name: 'Muhammad',
-//       image: [
-//         'assets/image/photo.jpg',
-//         'assets/image/photo.jpg',
-//         'assets/image/photo.jpg',
-//         'assets/image/photo.jpg',
-//         'assets/image/photo.jpg',
-//       ],
-//       rooms: [
-//         Room(
-//           name_room: 'VIP Rooms',
-//           image_room: 'assets/image/photo.jpg',
-//           price_day: '15000',
-//           room_type: 'ewsd',
-//         ),
-//         Room(
-//           name_room: 'Deluxe Rooms',
-//           image_room: 'assets/image/photo.jpg',
-//           price_day: '10000',
-//           room_type: 'ewsd',
-//         ),
-//         Room(
-//           name_room: 'Super Deluxe Rooms',
-//           image_room: 'assets/image/photo.jpg',
-//           price_day: '8000',
-//           room_type: 'ewsd',
-//         ),
-//         Room(
-//           name_room: 'hotel_Hall',
-//           image_room: 'assets/image/photo.jpg',
-//           price_day: '80090',
-//           room_type: 'ewsd',
-//         ),
-//       ],
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SingleChildScrollView(
-//         child: Column(
-//           children: [
-//             HotelImagesSection(
-//               imagePaths: hotel.image!,
-//             ),
-//             HotelInformationSection(
-//               name: hotel.name!,
-//             ),
-//             ...hotel.rooms!.map((room) => RoomSection(room: room)),
-//             BookingButton(
-//               onPressed: () {},
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+class _HotelPageState extends State<HotelPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocProvider(
+        create: (context) => di.sl<GetHotelBloc>()..add(GetInfoHotelEvent()),
+        child: BlocConsumer<GetHotelBloc, GetHotelState>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            if (state is LoadedProGetHotelState) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    HotelImagesSection(
+                      imagePaths: state.hotelInfo.imagePaths,
+                    ),
+                    TypeSection(room: state.hotelInfo.rooms[0]),
+                    TypeSection(room: state.hotelInfo.rooms[1]),
+                    TypeSection(room: state.hotelInfo.rooms[2]),
+                    // ...HotelInfo.rooms.map((room) => TypeSection(room: room)),
+                    TypeSection(
+                      getWiddModel: state.hotelInfo.getWiddModel,
+                    ),
+                    BookingButton(
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Center(
+                child: Text(state.toString()),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}

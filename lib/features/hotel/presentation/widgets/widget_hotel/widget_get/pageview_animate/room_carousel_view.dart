@@ -8,6 +8,7 @@ import 'card_room_carousel.dart';
 
 class RoomCarouselView extends StatelessWidget {
   final String imagePath;
+
   final PageController controller;
   final int index;
 

@@ -6,6 +6,7 @@ const CACHED_PRO_Shopper = "CACHED_PRO_Shopper";
 const CACHED_Token = "CACHED_Token";
 const CACHED_TYPE_SHOPPER = "CACHED_TYPE_SHOPPER";
 const CACHED_ID_HOTEL = "CACHED_ID_HOTEL";
+const CACHED_ID_Wallet = "CACHED_ID_Wallet";
 const CACHED_PRO_Admin = "CACHED_PRO_Admin";
 const IMAGE_BAGRAOUND = "assets/image/photo.jpg";
 late double width;
