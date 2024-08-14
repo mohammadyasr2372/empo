@@ -38,5 +38,5 @@ class _DropDownItemEventState extends State<DropDownItemEvent> {
   }
 }
 
-List<String> itemList = ['Wedding Hall', 'Hotal', 'Restorant', 'Cadies shop'];
+List<String> itemList = ['Wedding Hall', 'Hotal', 'Restorant', 'Candies shop'];
 String? selectedValue = itemList.first;

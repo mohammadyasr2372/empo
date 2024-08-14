@@ -44,27 +44,6 @@ class RoomsRepositoryImpl implements RoomRepository {
   }
 
   @override
-  Future<Either<Failure, List<Room>>> getMyRooms() async {
-    // if (await networkInfo.isConnected) {
-    try {
-      final remoteRoom = await roomApiService.getMyRooms();
-      // userLocalData.cacheUsers(remoteRoom as UserModel);
-      return Right(remoteRoom);
-    } on ServerException {
-      return Left(ServerFailure());
-    }
-
-    // else {
-    //   try {
-    //     final localUser = await userLocalData.getCachedProUser();
-    //     return Right(localUser);
-    //   } on EmptyCacheException {
-    //     return Left(EmptyCacheFailure());
-    //   }
-    // }
-  }
-
-  @override
   Future<Either<Failure, List<Room>>> getMyRoomsWithUser() async {
     try {
       final remoteRoom = await roomApiService.getMyRoomsWithUser();

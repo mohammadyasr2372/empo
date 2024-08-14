@@ -1,17 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, library_private_types_in_public_api
 
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:party/features/hotel/presentation/pages/hotel/get_hotel/hotel_page.dart';
 
 import '../../../widgets/ImagePlaceholder.dart';
 
 class HotelImagesSection extends StatefulWidget {
   final List<String> imagePaths;
 
-  const HotelImagesSection({Key? key, required this.imagePaths})
-      : super(key: key);
+  const HotelImagesSection({super.key, required this.imagePaths});
 
   @override
   _HotelImagesSectionState createState() => _HotelImagesSectionState();

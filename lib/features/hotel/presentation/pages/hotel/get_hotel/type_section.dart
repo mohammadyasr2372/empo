@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:party/features/hotel/data/model/get_widd_model.dart';
 import 'package:party/features/hotel/domain/entities/room_type.dart';
-import 'package:party/features/hotel/presentation/pages/hotel/get_hotel/hotel_page.dart';
 
 import 'pageviewhotel.dart';
 import 'pageviewhotel_widd.dart';
@@ -12,7 +11,7 @@ class TypeSection extends StatelessWidget {
   final RoomType? room;
   final GetWiddModel? getWiddModel;
 
-  const TypeSection({Key? key, this.room, this.getWiddModel}) : super(key: key);
+  const TypeSection({super.key, this.room, this.getWiddModel});
 
   @override
   Widget build(BuildContext context) {

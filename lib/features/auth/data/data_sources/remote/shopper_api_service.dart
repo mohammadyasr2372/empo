@@ -14,8 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
+import '../../../../features_vendor/data/models/posts_models/post_model/getall_post_model.dart';
 import '../../../domain/entities/shopper_entity.dart';
 import '../../model/createchargewallet_model.dart';
+import '../../model/get_Pro_shopper.dart';
 import '../../model/get_location_shopper.dart';
 import '../../model/getwallet_model.dart';
 import '../../model/post_info_shoppper.dart';
@@ -24,7 +26,7 @@ abstract class ShopperApiService {
   Future<Unit> loginShopper({required Shopper newShopper});
   Future<Unit> updateProShopper(
       {required Shopper newShopper, required File image});
-  Future<Shopper> getProShopper();
+  Future<GetProShopperModel> getProShopper();
   Future<Unit> deleteShopper();
   Future<Unit> changeMyPasswordShopper({required Shopper newShopper});
   Future<Unit> changeMylocationShopper({required String location});
@@ -35,10 +37,10 @@ abstract class ShopperApiService {
       {required PostInfoLocationShopper postInfoLocationShopper});
   Future<GetLocationShopper> getMylocation();
   Future<Unit> createShopperWallet(CreatewalletModel datapost);
-  Future<Unit> chargeWallet(CreatechargewalletModel chargewallet);
+  Future<Unit> chargeWallet({required CreatechargewalletModel chargewallet});
   Future<PaidShopperModel> PaidSopper();
   Future<GetwalletModel> GetWallet();
-  // Future<ReportGetAllPostsModle> getMyposts_datasource();
+  Future<ReportGetAllPostsModle> getMyposts_datasource();
 }
 
 class ShopperApiServiceIpml implements ShopperApiService {
@@ -111,16 +113,23 @@ class ShopperApiServiceIpml implements ShopperApiService {
   }
 
   @override
-  Future<Shopper> getProShopper() async {
+  Future<GetProShopperModel> getProShopper() async {
     final response = await dio.get(
-      "$BASE_URL/posts/",
+      "$BASE_URL/api/shopper/get_pro",
+      options: Options(
+        headers: {
+          'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+          "Content-Type": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      ),
     );
 
     if (response.statusCode == 200) {
-      final decodedJson = json.decode(response.data['']);
-      final ShopperModel shopperModel = ShopperModel.fromJson(decodedJson);
+      final GetProShopperModel getProShopper =
+          GetProShopperModel.fromMap(response.data);
 
-      return shopperModel;
+      return getProShopper;
     } else {
       throw ServerException();
     }
@@ -145,12 +154,12 @@ class ShopperApiServiceIpml implements ShopperApiService {
     try {
       final response = await dio.post("$BASE_URL/api/shopper/loginshopper",
           data: newShopper.toJson());
-      print(response.data['RefreshToken']);
+      print(response.data['accessToken']);
       print(response.data);
       if (response.statusCode == 200) {
         di.sl
             .get<SharedPreferences>()
-            .setString(CACHED_Token, response.data['RefreshToken']);
+            .setString(CACHED_Token, response.data['accessToken']);
         di.sl.get<SharedPreferences>().setString(
             CACHED_TYPE_SHOPPER, response.data['CACHED_TYPE_SHOPPER']);
         return Future.value(unit);
@@ -167,12 +176,12 @@ class ShopperApiServiceIpml implements ShopperApiService {
     try {
       final response = await dio.post("$BASE_URL/api/shopper/registershopper",
           data: newShopper.toJson());
-      print(response.data['RefreshToken']);
+      print(response.data['accessToken']);
       print(response.data['shopper']['event_type']);
       if (response.statusCode == 200) {
         di.sl
             .get<SharedPreferences>()
-            .setString(CACHED_Token, response.data['RefreshToken']);
+            .setString(CACHED_Token, response.data['accessToken']);
         di.sl.get<SharedPreferences>().setString(
             CACHED_TYPE_SHOPPER, response.data['shopper']['event_type']);
         return Future.value(unit);
@@ -287,11 +296,22 @@ class ShopperApiServiceIpml implements ShopperApiService {
         ),
       );
       if (response.statusCode == 201 || response.statusCode == 200) {
+        final response = await dio.get(
+          '$BASE_URL/api/shopper/getMywallet',
+          options: Options(
+            headers: {
+              'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+              "Content-Type": "application/json",
+              "Access-Control_Allow_Origin": "*"
+            },
+          ),
+        );
+
         di.sl
             .get<SharedPreferences>()
-            .setString(CACHED_ID_Wallet, response.data['ID']);
+            .setString(CACHED_ID_Wallet, response.data['data']);
         print('Response data: ${response.data}');
-        print('Response data: ${response.data['ID']}');
+        print('Response data: ${response.data['data']}');
         return Future.value(unit);
       } else {
         print('Response data: ${response.data}');
@@ -312,7 +332,8 @@ class ShopperApiServiceIpml implements ShopperApiService {
   }
 
   @override
-  Future<Unit> chargeWallet(CreatechargewalletModel chargewallet) async {
+  Future<Unit> chargeWallet(
+      {required CreatechargewalletModel chargewallet}) async {
     try {
       final response = await dio.post(
         '$BASE_URL/api/shopper/create_recharge',
@@ -407,33 +428,34 @@ class ShopperApiServiceIpml implements ShopperApiService {
     }
   }
 
-  // @override
-  // Future<ReportGetAllPostsModle> getMyposts_datasource() async {
-  //   try {
-  //     final response = await dio.get(
-  //       '${BASE_URL}/api/shopper/getMyPosts',
-  //       options: Options(
-  //         headers: {
-  //           'token': token,
-  //           "Content-Type": "application/json",
-  //           "Access-Control_Allow_Origin": "*"
-  //         },
-  //       ),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       // final decodedJson = jsonDecode(response.data);
-  //       final msgGetWeddhal = ReportGetAllPostsModle.fromJson(response.data);
-  //       return msgGetWeddhal;
-  //     } else {
-  //       throw ServerException();
-  //     }
-  //   } on DioError catch (e) {
-  //     if (e.response != null) {
-  //       print('Dio error! Response data: ${e.response!.data}');
-  //       print('Dio error! Status code: ${e.response?.statusCode}');
-  //     } else {
-  //       print('Dio error! Message: ${e.message}');
-  //     }
-  //     throw ServerException();
-  //   }
+  @override
+  Future<ReportGetAllPostsModle> getMyposts_datasource() async {
+    try {
+      final response = await dio.get(
+        '$BASE_URL/api/shopper/getMyPosts',
+        options: Options(
+          headers: {
+            'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+            "Content-Type": "application/json",
+            "Access-Control_Allow_Origin": "*"
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        // final decodedJson = jsonDecode(response.data);
+        final msgGetWeddhal = ReportGetAllPostsModle.fromJson(response.data);
+        return msgGetWeddhal;
+      } else {
+        throw ServerException();
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print('Dio error! Response data: ${e.response!.data}');
+        print('Dio error! Status code: ${e.response?.statusCode}');
+      } else {
+        print('Dio error! Message: ${e.message}');
+      }
+      throw ServerException();
+    }
+  }
 }

@@ -80,7 +80,6 @@ class _CreateWalletState extends State<CreateWallet> {
                     setState(() {
                       walletCreated = true;
                       walletPassword = passwordController.text;
-                      walletId = '';
                     });
                     _showRechargeDialog();
                   } catch (e) {
@@ -158,7 +157,7 @@ class _CreateWalletState extends State<CreateWallet> {
                 Navigator.of(context).pop();
                 try {
                   await sl<ShopperApiService>().chargeWallet(
-                    CreatechargewalletModel(
+                    chargewallet: CreatechargewalletModel(
                       password: password,
                       rechargeMoney: amount,
                       walteId: di.sl

@@ -55,15 +55,15 @@ class GetRoomsWithUserUseCase {
   }
 }
 
-class GetMyRoomsUseCase {
-  final RoomRepository _roomRepository;
+// class GetMyRoomsUseCase {
+//   final RoomRepository _roomRepository;
 
-  GetMyRoomsUseCase(this._roomRepository);
+//   GetMyRoomsUseCase(this._roomRepository);
 
-  Future<Either<Failure, List<Room>>> call() {
-    return _roomRepository.getMyRooms();
-  }
-}
+//   Future<Either<Failure, List<Room>>> call() {
+//     return _roomRepository.getMyRooms();
+//   }
+// }
 
 class GetMyRoomsWithUserUseCase {
   final RoomRepository _roomRepository;

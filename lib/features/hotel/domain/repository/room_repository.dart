@@ -11,7 +11,6 @@ abstract class RoomRepository {
   Future<Either<Failure, Unit>> updateRoom({required Room newRoom});
   Future<Either<Failure, List<Room>>> getRooms();
   Future<Either<Failure, List<Room>>> getRoomsWithuser();
-  Future<Either<Failure, List<Room>>> getMyRooms();
   Future<Either<Failure, List<Room>>> getMyRoomsWithUser();
   Future<Either<Failure, List<Room>>> getRooms_notBooked();
   Future<Either<Failure, Unit>> ChangeStayRoom({required Room newRoom});

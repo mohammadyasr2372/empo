@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_final_fields, library_private_types_in_public_api, use_super_parameters
+// ignore_for_file: prefer_final_fields, library_private_types_in_public_api, use_super_parameters, unnecessary_null_comparison, non_constant_identifier_names
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -12,10 +11,7 @@ import 'package:party/features/hotel/data/data_sources/remote/widd_api_service.d
 import 'package:party/features/hotel/domain/entities/hotel_entity.dart';
 import 'package:party/features/hotel/domain/entities/room_entity.dart';
 import 'package:party/features/hotel/domain/entities/widd_hotel_post.dart';
-import 'package:party/injection_container.dart' as di;
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../../../core/strings/constans.dart';
 import '../../../../../../injection_container.dart';
 import 'image_slider.dart';
 import 'room_section_post.dart';

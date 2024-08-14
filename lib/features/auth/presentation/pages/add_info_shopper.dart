@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, must_be_immutable, use_build_context_synchronously, unused_element
 
 // import 'dart:ffi';
 import 'dart:io';
@@ -13,6 +13,10 @@ import 'package:party/features/auth/presentation/pages/create_wallet.dart';
 import 'package:party/features/auth/presentation/widgets/button.dart';
 // import 'package:party/features/hotel/data/data_sources/remote/widd_api_service.dart';
 import 'package:party/injection_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../features_vendor/presentation/pages/wedding_hall/post_wedding_hall/Wedding_Hall_Post.dart';
+import '../../../hotel/presentation/pages/hotel/post_hotel/hotel_post.dart';
 
 TextEditingController? nameEventcontroller = TextEditingController();
 final ImagePicker _picker = ImagePicker();
@@ -81,7 +85,7 @@ class _AddInfoShopperState extends State<AddInfoShopper> {
           ElevatedButton.icon(
             onPressed: _pickImage,
             icon: Icon(Icons.camera_alt),
-            label: Text('اختر صورة'),
+            label: Text('Selected image'),
           ),
           SizedBox(
             height: 10,
@@ -135,14 +139,29 @@ class _AddInfoShopperState extends State<AddInfoShopper> {
                   onPressed: () async {
                     await sl<ShopperApiService>().AddInfoShopper(
                       postInfoLocationShopper: PostInfoLocationShopper(
-                          location1: latitude!,
-                          location2: longitude!,
+                          location1: latitude ?? 0,
+                          location2: longitude ?? 0,
                           Name: nameEventcontroller!.text,
                           city: city ?? 'dammascus',
                           image: _imageFile!),
                     );
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => CreateWallet()));
+                    String temp = sl
+                        .get<SharedPreferences>()
+                        .getString(CACHED_TYPE_SHOPPER)!;
+                    print(temp);
+                    if (temp == 'Wedding Hall') {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => WeddingHallPost()));
+                    } else if (temp == 'Hotal') {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => /*CreateWallet*/ PostHotel()));
+                    } else if (temp == 'Cadies shop') {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => /*CreateWallet*/ PostHotel()));
+                    } else if (temp == 'Restorant') {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => /*CreateWallet*/ PostHotel()));
+                    }
                   },
                   width: width)),
         ],
@@ -152,7 +171,7 @@ class _AddInfoShopperState extends State<AddInfoShopper> {
 }
 
 class OpenStreet extends StatefulWidget {
-  const OpenStreet({Key? key, required this.title}) : super(key: key);
+  const OpenStreet({super.key, required this.title});
 
   final String title;
 
@@ -179,11 +198,7 @@ class _OpenStreetState extends State<OpenStreet> {
               longitude = pickedData.latLong.longitude;
               country = pickedData.address['country'];
               city = pickedData.address['state'];
-              print(latitude);
-              print(longitude);
-              print(pickedData.address);
-              print(pickedData.addressName);
-              Navigator.of(context).pop();
+
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (_) => AddInfoShopper()));
             },
@@ -200,7 +215,8 @@ class LocationInfoWidget extends StatelessWidget {
   final String longitude;
   final String latitude;
 
-  LocationInfoWidget({
+  const LocationInfoWidget({
+    super.key,
     required this.country,
     required this.city,
     required this.longitude,

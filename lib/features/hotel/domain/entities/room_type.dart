@@ -4,7 +4,6 @@ import 'room_short.dart';
 
 class RoomType {
   final String title;
-
   final List<RoomShort> images;
   RoomType({
     required this.title,

@@ -1,186 +1,30 @@
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import '../../../../../../core/resources/data_state.dart';
-// import '../../../../domain/usecase/shopper.dart';
-// import 'shopper_event.dart';
-// import 'shopper_state.dart';
+// ignore_for_file: depend_on_referenced_packages, type_literal_in_constant_pattern
 
-// class ShopperBloc extends Bloc<ShopperEvent, ShopperState> {
-//   final LoginShopperUseCase _loginShopperUseCase;
-//   final RegisterShopperUseCase _registerShopperUseCase;
-//   final DeleteShopperUseCase _deleteShopperUseCase;
-//   final UpdataShopperUseCase _updataShopperUseCase;
-//   final GetProShopperUseCase _getProShopperUseCase;
-//   final ChangeMyPasswordShopperUseCase _changeMyPasswordShopperUseCase;
-//   final ChangeMylocationShopperUseCase _changeMylocationShopperUseCase;
-//   final ChangeEventNameShopperUseCase _changeEventNameShopperUseCase;
+import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
+import 'package:party/features/auth/data/model/get_Pro_shopper.dart';
 
-//   final InformationDataWithEventUseCase _informationDataWithEventUseCase;
-//   final GetLocationShopperUseCase _getLocationShopperUseCase;
+import '../../../../../../injection_container.dart';
+import '../../../../data/data_sources/remote/shopper_api_service.dart';
+part 'shopper_event.dart';
+part 'shopper_state.dart';
 
-//   ShopperBloc(
-//       this._loginShopperUseCase,
-//       this._registerShopperUseCase,
-//       this._deleteShopperUseCase,
-//       this._updataShopperUseCase,
-//       this._getProShopperUseCase,
-//       this._changeMyPasswordShopperUseCase,
-//       this._changeMylocationShopperUseCase,
-//       this._informationDataWithEventUseCase,
-//       this._getLocationShopperUseCase, this._changeEventNameShopperUseCase)
-//       : super(const ShopperInitState()) {
-//     on<LoginShopper>(onLoginShopper);
-//     on<RegisterShopper>(onRegisterShopper);
-//     on<DeleteShopper>(onDeleteShopper);
-//     on<UpdataProShopper>(onUpdataProShopper);
-//     on<GetProShopper>(onGetPro);
-//     on<ChangeMyPasswordShopper>(onChangeMyPasswordShopper);
-//   }
+class ShopperBloc extends Bloc<GetShopperEvent, GetShopperState> {
+  ShopperBloc() : super(GetShopperInitial()) {
+    on<GetShopperEvent>((event, emit) async {
+      if (event is GetProShopperEvent) {
+        emit(LoadingGetShopperState());
 
-//   void onLoginShopper(LoginShopper event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState = await _loginShopperUseCase(params: event.shopper);
-
-//     if (dataState is DataSuccess) {
-//       emit(LoginShopperDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   }
-
-//   void onRegisterShopper(
-//       RegisterShopper event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState =
-//         await _registerShopperUseCase(params: event.shopperEntity);
-
-//     if (dataState is DataSuccess) {
-//       emit(RegisterShopperDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   } void onInformationDataWithEvent(
-//       InformationDataWithEventShopper event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState =
-//         await _informationDataWithEventUseCase(params: event.shopperEntity);
-
-//     if (dataState is DataSuccess) {
-//       emit(InformationDataWithEventShopperDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   }
-
-//   void onGetLocationShopperUseCase(
-//       GetLocationShopperUseCase event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState = await _getLocationShopperUseCase();
-
-//     if (dataState is DataSuccess) {
-//       emit(GetMylocationDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   }
-
-//   void onDeleteShopper(DeleteShopper event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState = await _deleteShopperUseCase();
-
-//     if (dataState is DataSuccess) {
-//       emit(DeleteShopperDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   }
-
-//   void onUpdataProShopper(
-//       UpdataProShopper event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState = await _updataShopperUseCase(params: event.shopperEntity);
-
-//     if (dataState is DataSuccess) {
-//       emit(UpdataProShopperDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   }
-
-//   void onGetPro(GetProShopper event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState = await _getProShopperUseCase();
-
-//     if (dataState is DataSuccess) {
-//       emit(GetProShopperDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   }
-
-//   void onChangeMyPasswordShopper(
-//       ChangeMyPasswordShopper event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState =
-//         await _changeMyPasswordShopperUseCase(params: event.shopperEntity);
-
-//     if (dataState is DataSuccess) {
-//       emit(ChangeMyPasswordShopperDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   }
-
-//   void onChangeMylocationShopper(
-//       ChangeMylocationShopper event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState =
-//         await _changeMylocationShopperUseCase(params: event.location);
-
-//     if (dataState is DataSuccess) {
-//       emit(ChangeMylocationShopperDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   }void onChangeEventNameShopper(
-//       ChangeEventNameShopper event, Emitter<ShopperState> emit) async {
-//     emit(const ShopperLoadingState());
-
-//     final dataState =
-//         await _changeEventNameShopperUseCase(params: event.location);
-
-//     if (dataState is DataSuccess) {
-//       emit(ChangeEventNameShopperDoneState(dataState.data!));
-//     }
-
-//     if (dataState is DataFailed) {
-//       emit(ShopperErrorState(dataState.exception!));
-//     }
-//   }
-// }
+        GetProShopperModel proShopperModel =
+            await sl<ShopperApiService>().getProShopper();
+        emit(LoadedProGetShopperState(getProShopperModel: proShopperModel));
+      } else if (event is RefreshProShopperEvent) {
+        emit(LoadingGetShopperState());
+        GetProShopperModel proShopperModel =
+            await sl<ShopperApiService>().getProShopper();
+        emit(LoadedProGetShopperState(getProShopperModel: proShopperModel));
+      }
+    });
+  }
+}

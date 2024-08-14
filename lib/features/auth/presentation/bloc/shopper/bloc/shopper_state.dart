@@ -1,77 +1,30 @@
-// import 'package:dio/dio.dart';
-// import 'package:equatable/equatable.dart';
+part of 'shopper_bloc.dart';
 
-// import '../../../../domain/entities/shopper_entity.dart';
+sealed class GetShopperState extends Equatable {
+  const GetShopperState();
 
-// abstract class ShopperState extends Equatable {
-//   final ShopperEntity? shopper;
-//   final String? massege;
+  @override
+  List<Object> get props => [];
+}
 
-//   final DioException? exception;
-//   const ShopperState({
-//     this.shopper,
-//     this.massege,
-//     this.exception,
-//   });
+final class GetShopperInitial extends GetShopperState {}
 
-//   @override
-//   List<Object?> get props => [shopper, massege, exception];
-// }
+class LoadingGetShopperState extends GetShopperState {}
 
-// class ShopperInitState extends ShopperState {
-//   const ShopperInitState();
-// }
+class LoadedProGetShopperState extends GetShopperState {
+  final GetProShopperModel getProShopperModel;
 
-// class ShopperLoadingState extends ShopperState {
-//   const ShopperLoadingState();
-// }
+  const LoadedProGetShopperState({required this.getProShopperModel});
 
-// class ShopperErrorState extends ShopperState {
-//   const ShopperErrorState(DioException exception) : super(exception: exception);
-// }
+  @override
+  List<Object> get props => [getProShopperModel];
+}
 
-// class LoginShopperDoneState extends ShopperState {
-//   const LoginShopperDoneState(ShopperEntity shopper) : super(shopper: shopper);
-// }
+class ErrorGetShopperState extends GetShopperState {
+  final String message;
 
-// class RegisterShopperDoneState extends ShopperState {
-//   const RegisterShopperDoneState(ShopperEntity shopper)
-//       : super(shopper: shopper);
-// }
+  const ErrorGetShopperState({required this.message});
 
-// class DeleteShopperDoneState extends ShopperState {
-//   const DeleteShopperDoneState(String massege) : super(massege: massege);
-// }
-
-// class UpdataProShopperDoneState extends ShopperState {
-//   const UpdataProShopperDoneState(ShopperEntity shopper)
-//       : super(shopper: shopper);
-// }
-
-// class GetProShopperDoneState extends ShopperState {
-//   const GetProShopperDoneState(ShopperEntity shopper) : super(shopper: shopper);
-// }
-
-// class GetMylocationDoneState extends ShopperState {
-//   const GetMylocationDoneState(String massage) : super(massege: massage);
-// }
-
-// class ChangeMyPasswordShopperDoneState extends ShopperState {
-//   const ChangeMyPasswordShopperDoneState(ShopperEntity shopper)
-//       : super(shopper: shopper);
-// }
-
-// class ChangeMylocationShopperDoneState extends ShopperState {
-//   const ChangeMylocationShopperDoneState(ShopperEntity shopper)
-//       : super(shopper: shopper);
-// }
-
-// class ChangeEventNameShopperDoneState extends ShopperState {
-//   const ChangeEventNameShopperDoneState(ShopperEntity shopper)
-//       : super(shopper: shopper);
-// }
-
-// class InformationDataWithEventShopperDoneState extends ShopperState {
-//   const InformationDataWithEventShopperDoneState(ShopperEntity shopper)
-//       : super(shopper: shopper);
-// }
+  @override
+  List<Object> get props => [message];
+}

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields, library_private_types_in_public_api, use_super_parameters
+// ignore_for_file: prefer_final_fields, library_private_types_in_public_api, use_super_parameters, non_constant_identifier_names
 
 import 'dart:io';
 import 'package:flutter/material.dart';

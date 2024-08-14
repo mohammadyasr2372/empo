@@ -14,6 +14,7 @@ import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
 import '../../../domain/entities/room_entity.dart';
 import '../../model/image_room_model.dart';
+import '../../model/room_get.dart';
 import '../../model/room_model.dart';
 
 abstract class RoomApiService {
@@ -22,7 +23,7 @@ abstract class RoomApiService {
   Future<Unit> updateRoom({required Room newRoom});
   Future<List<Room>> getRooms();
   Future<List<Room>> getRoomsWithuser();
-  Future<List<Room>> getMyRooms();
+  Future<RoomGet> getMyRoom({required String id});
   Future<List<Room>> getMyRoomsWithUser();
   Future<List<Room>> getRooms_notBooked();
   Future<Unit> ChangeStayRoom({required Room newRoom});
@@ -107,18 +108,24 @@ class RoomApiServiceIpml implements RoomApiService {
   }
 
   @override
-  Future<List<Room>> getMyRooms() async {
+  Future<RoomGet> getMyRoom({required String id}) async {
     final response = await dio.get(
-      "$BASE_URL/posts/",
+      "$BASE_URL/api/shopper/getMyroom/$id",
+      options: Options(
+        headers: {
+          'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+          "Content-Type": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      ),
     );
-
+    print('objectm');
+    print(response.data['DataRoom']);
     if (response.statusCode == 200) {
-      final List decodedJson = json.decode(response.data) as List;
-      final List<RoomModel> roomModels = decodedJson
-          .map<RoomModel>((jsonRoomModel) => RoomModel.fromJson(jsonRoomModel))
-          .toList();
+      final RoomGet room = RoomGet.fromMap(response.data['DataRoom']);
+      print('objectm');
 
-      return roomModels;
+      return room;
     } else {
       throw ServerException();
     }

@@ -70,25 +70,25 @@ class ShopperRepositoryImpl implements ShopperRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, Shopper>> getProShopper() async {
-    if (await networkInfo.isConnected) {
-      try {
-        final remoteShopper = await shopperApiService.getProShopper();
-        shopperLocalData.cacheShoppers(remoteShopper as ShopperModel);
-        return Right(remoteShopper);
-      } on ServerException {
-        return Left(ServerFailure());
-      }
-    } else {
-      try {
-        final localShopper = await shopperLocalData.getCachedProShopper();
-        return Right(localShopper);
-      } on EmptyCacheException {
-        return Left(EmptyCacheFailure());
-      }
-    }
-  }
+  // @override
+  // Future<Either<Failure, Shopper>> getProShopper() async {
+  //   if (await networkInfo.isConnected) {
+  //     try {
+  //       final remoteShopper = await shopperApiService.getProShopper();
+  //       shopperLocalData.cacheShoppers(remoteShopper as ShopperModel);
+  //       return Right(remoteShopper);
+  //     } on ServerException {
+  //       return Left(ServerFailure());
+  //     }
+  //   } else {
+  //     try {
+  //       final localShopper = await shopperLocalData.getCachedProShopper();
+  //       return Right(localShopper);
+  //     } on EmptyCacheException {
+  //       return Left(EmptyCacheFailure());
+  //     }
+  //   }
+  // }
 
   @override
   Future<Either<Failure, Shopper>> informationDataWithEvent(
@@ -128,5 +128,11 @@ class ShopperRepositoryImpl implements ShopperRepository {
     return await getMessage(networkInfo, () {
       return shopperApiService.loginShopper(newShopper: newShopper);
     });
+  }
+
+  @override
+  Future<Either<Failure, Shopper>> getProShopper() {
+    // TODO: implement getProShopper
+    throw UnimplementedError();
   }
 }
