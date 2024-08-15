@@ -1,10 +1,16 @@
 // ignore_for_file: public_member_/api_docs, sort_constructors_first, non_constant_identifier_names, constant_identifier_names, avoid_print
 import 'dart:convert';
+import 'dart:io';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:party/injection_container.dart' as di;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
 import '../../../../../injection_container.dart' as di;
+import '../../../domain/entities/posts_entity/post_entity/craetepost_entity.dart';
 import '../../models/posts_models/comment_model/deletecomment_model.dart';
 import '../../models/posts_models/comment_model/getcomment_model.dart';
 import '../../models/posts_models/like_model/deletelike_model.dart';
@@ -20,8 +26,8 @@ import '../../models/posts_models/post_model/updatepost_model.dart';
 
 abstract class PostsDatasource {
 ////////////posts//////////////
-  Future<ReportPostModel> createpost_datasource(AddPostModel datapost);
-  Future<ReportUpdatepostModel> updatepost_datasource(AddPostModel datapost);
+  Future<Unit> createpost_datasource(AddPostEntity addPostEntity);
+  Future<ReportUpdatepostModel> updatepost_datasource(AddPostEntity datapost);
   Future<ReportGetAllPostsModle> getallposts_datasource();
   Future<DeletepostModel> deletePost_datasource(DeleteIDpostModel idpost);
 ///////////Comment/////////////
@@ -48,79 +54,52 @@ class PostdatasourceImpl implements PostsDatasource {
   });
 ////////////////////////Posts///////////////////
   @override
-  Future<ReportPostModel> createpost_datasource(AddPostModel datapost) async {
-    List<MultipartFile> multipartImages = [];
+  Future<Unit> createpost_datasource(AddPostEntity addPostEntity) async {
+    final request = http.MultipartRequest(
+        'POST', _getUri('$BASE_URL/api/shopper/create_post'));
+    request.headers['token'] =
+        di.sl.get<SharedPreferences>().getString(CACHED_Token)!;
 
-    for (var file in datapost.images) {
-      if (file.images != null && file.images!.existsSync()) {
-        multipartImages.add(MultipartFile.fromFileSync(
-          file.images!.path,
-        ));
-      }
+    for (final imagePath in addPostEntity.images) {
+      final file = File(imagePath.path);
+      request.files.add(await http.MultipartFile.fromPath(
+        'images',
+        imagePath.path,
+        filename: file.path.split('/').last,
+        contentType: MediaType('image', 'png'),
+      ));
     }
-    // List<MultipartFile> multipartImages = [];
-    //
-    // for (var file in datapost.images) {
-    //   if (file.images != null && file.images!.existsSync()) {
-    //     multipartImages.add(MultipartFile.fromFileSync(
-    //       file.images!.path,
-    //       contentType: MediaType('image', 'jpeg'),
-    //     ));
-    //   }
-    // }
 
-    FormData formData = FormData.fromMap({
-      'shopperId': datapost.shopperId,
-      'title': datapost.title,
-      'content': datapost.content,
-      'images': multipartImages
-      //  datapost.images
-      //     .map((file) => MultipartFile.fromFileSync(file.images!.path))
-      //     .toList(),
+    request.fields.addAll({
+      'title': addPostEntity.title!,
+      'content': addPostEntity.content!,
+      'shopperId': di.sl.get<SharedPreferences>().getString(CACHED_ID_SHOOPER)!,
     });
-    try {
-      final response = await dio.post(
-        '${BASE_URL}/api/shopper/create_post',
-        data: formData,
-        options: Options(
-          headers: {
-            'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!
-          },
-        ),
-      );
-      if (response.statusCode == 201) {
-        ReportPostModel reportpost = ReportPostModel.fromJson(response.data);
-        print('Response data: ${response.data}');
-        print('${reportpost.success}');
-        print('${reportpost.message}');
-        print('${reportpost.dataPost}');
-        return reportpost;
-      } else {
-        print('Server responded with status: ${response.statusCode}');
-        print('Response data: ${response.data}');
-        throw ServerException();
-      }
-    } on DioException catch (e) {
-      if (e.response != null) {
-        print('Dio error! Response data: ${e.response!.data}');
-        print('Dio error! Status code: ${e.response?.statusCode}');
-      } else {
-        print('Dio error! Message: ${e.message}');
-      }
-      throw ServerException();
+
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      print('File upload successful ');
+      final responseBody = await response.stream.bytesToString();
+      final data = json.decode(responseBody);
+      print(data);
+    } else {
+      print('File upload failed with status code: ${response.statusCode}');
+      print(
+          'File upload failed with status code: ${await response.stream.bytesToString()}');
     }
+    return Future.value(unit);
   }
 
   @override
   Future<ReportUpdatepostModel> updatepost_datasource(
-      AddPostModel datapost) async {
+      AddPostEntity datapost) async {
     FormData formData = FormData.fromMap({
-      'shopperId': datapost.shopperId,
+      // 'shopperId': datapost.shopperId,
       'content': datapost.content,
       'title': datapost.title,
-      'images': datapost.images
-          .map((file) => MultipartFile.fromFileSync(file.images!.path))
-          .toList(),
+      // 'images': datapost.images
+      //     .map((file) => MultipartFile.fromFileSync(file.images!.path))
+      //     .toList(),
     });
     try {
       final response = await dio.post(
@@ -537,5 +516,9 @@ class PostdatasourceImpl implements PostsDatasource {
       }
       throw ServerException();
     }
+  }
+
+  Uri _getUri(String url) {
+    return Uri.parse(url);
   }
 }

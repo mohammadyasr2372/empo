@@ -17,14 +17,14 @@ import '../../../../../features_vendor/presentation/pages/shopper/MainScreenShop
 import 'image_slider.dart';
 import 'room_section_post.dart';
 
-class PostHotel extends StatefulWidget {
-  const PostHotel({Key? key}) : super(key: key);
+class AddRoomHotel extends StatefulWidget {
+  const AddRoomHotel({Key? key}) : super(key: key);
 
   @override
-  _PostHotelState createState() => _PostHotelState();
+  _AddRoomHotelState createState() => _AddRoomHotelState();
 }
 
-class _PostHotelState extends State<PostHotel> {
+class _AddRoomHotelState extends State<AddRoomHotel> {
   final PageController _pageController = PageController(initialPage: 0);
   final PageController _WiddController = PageController(initialPage: 0);
   final PageController _vipRoomPageController =
@@ -113,12 +113,12 @@ class _PostHotelState extends State<PostHotel> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ImageSlider(
-              images: _hotelImages,
-              pageController: _pageController,
-              activePage: _activePage,
-              onAddImage: () => _pickImage(imageList: _hotelImages),
-            ),
+            // ImageSlider(
+            //   images: _hotelImages,
+            //   pageController: _pageController,
+            //   activePage: _activePage,
+            //   onAddImage: () => _pickImage(imageList: _hotelImages),
+            // ),
             const SizedBox(height: 10),
             RoomSectionPost(
               title: 'VIP Rooms',
@@ -186,17 +186,17 @@ class _PostHotelState extends State<PostHotel> {
                     name_room: _superDeluxeRoomnameController.text,
                     image_room: _superDeluxeRoomImages,
                   ));
-                  await sl<WiddApiService>().addWidd(
-                      newWidd: WiddHotelPost(
-                          hotelId: _NameWiddinController.text,
-                          bookprice: _bookpriceController.text,
-                          capacity: _capacityController.text,
-                          personbook: _personbookController.text,
-                          capacityMin: _capacityMinController.text,
-                          imagewids_hotal: _WiddHotalImages));
+                  // await sl<WiddApiService>().addWidd(
+                  //     newWidd: WiddHotelPost(
+                  //         hotelId: _NameWiddinController.text,
+                  //         bookprice: _bookpriceController.text,
+                  //         capacity: _capacityController.text,
+                  //         personbook: _personbookController.text,
+                  //         capacityMin: _capacityMinController.text,
+                  //         imagewids_hotal: _WiddHotalImages));
 
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => MainScreen()));
+                  // Navigator.of(context)
+                  //     .push(MaterialPageRoute(builder: (_) => MainScreen()));
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize:

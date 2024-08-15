@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import '../../../../../../injection_container.dart';
 import '../../../../data/data_source/posts_data_source/posts_datasource.dart';
 
 import '../../../../data/models/posts_models/post_model/getall_post_model.dart';
@@ -27,7 +28,8 @@ class _PostsPageState extends State<PostsPage> {
 
   Future<void> fetchPosts() async {
     try {
-      final fetchedPosts = await postDatasource.getallposts_datasource();
+      final ReportGetAllPostsModle fetchedPosts =
+          await sl<PostsDatasource>().getallposts_datasource();
       setState(() {
         posts = fetchedPosts;
         isLoading = false;
@@ -56,7 +58,7 @@ class _PostsPageState extends State<PostsPage> {
                       itemBuilder: (context, index) {
                         return PostCard(
                           post: posts!.dataPost[index],
-                          isVendor: false,
+                          isVendor: true,
                         );
                       },
                     )

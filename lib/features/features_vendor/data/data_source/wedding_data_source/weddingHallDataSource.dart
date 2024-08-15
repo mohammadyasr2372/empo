@@ -24,11 +24,6 @@ abstract class Weddinghalldatasource {
     List<File> imagewids,
   );
   Future<Unit> updateweddingdetailsdatasource(
-    // int bookprice,
-    // int capacity,
-    // int personbook,
-    // int capacityMin,
-    // List<File> imagewids,
     DatawiddPOst datawiddpost,
   );
   Future<msg_Get_Wedd_hal> getweddingdetailsdatasourece();

@@ -114,8 +114,10 @@ class ShopperApiServiceIpml implements ShopperApiService {
 
   @override
   Future<GetProShopperModel> getProShopper() async {
+    print(di.sl.get<SharedPreferences>().getString(CACHED_Token)!);
+    print('$BASE_URL/api/shopper/get_pro');
     final response = await dio.get(
-      "$BASE_URL/api/shopper/get_pro",
+      '$BASE_URL/api/shopper/get_pro',
       options: Options(
         headers: {
           'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
@@ -124,10 +126,14 @@ class ShopperApiServiceIpml implements ShopperApiService {
         },
       ),
     );
+    print('object');
+    print(response.data);
 
     if (response.statusCode == 200) {
+      print('object');
+
       final GetProShopperModel getProShopper =
-          GetProShopperModel.fromMap(response.data);
+          GetProShopperModel.fromMap(response.data['data']);
 
       return getProShopper;
     } else {
@@ -154,14 +160,25 @@ class ShopperApiServiceIpml implements ShopperApiService {
     try {
       final response = await dio.post("$BASE_URL/api/shopper/loginshopper",
           data: newShopper.toJson());
-      print(response.data['accessToken']);
+      print(response.data['RefreshToken']);
       print(response.data);
       if (response.statusCode == 200) {
         di.sl
             .get<SharedPreferences>()
-            .setString(CACHED_Token, response.data['accessToken']);
+            .setString(CACHED_Token, response.data['RefreshToken']);
         di.sl.get<SharedPreferences>().setString(
             CACHED_TYPE_SHOPPER, response.data['CACHED_TYPE_SHOPPER']);
+        di.sl
+            .get<SharedPreferences>()
+            .setString(CACHED_ID_SHOOPER, response.data['CACHED_TYPE_SHOPPER']);
+        di.sl.get<SharedPreferences>().setString(
+            CACHED_TYPE_SHOPPER, response.data['shopper']['event_type']);
+        di.sl
+            .get<SharedPreferences>()
+            .setString(CACHED_ID_SHOOPER, response.data['shopper']['_id']);
+        di.sl
+            .get<SharedPreferences>()
+            .setBool(CACHED_IS_Vendor, response.data['shopper']['is_shopper']);
         return Future.value(unit);
       } else {
         throw ServerException();
@@ -176,14 +193,20 @@ class ShopperApiServiceIpml implements ShopperApiService {
     try {
       final response = await dio.post("$BASE_URL/api/shopper/registershopper",
           data: newShopper.toJson());
-      print(response.data['accessToken']);
+      print(response.data['RefreshToken']);
       print(response.data['shopper']['event_type']);
       if (response.statusCode == 200) {
         di.sl
             .get<SharedPreferences>()
-            .setString(CACHED_Token, response.data['accessToken']);
+            .setString(CACHED_Token, response.data['RefreshToken']);
         di.sl.get<SharedPreferences>().setString(
             CACHED_TYPE_SHOPPER, response.data['shopper']['event_type']);
+        di.sl
+            .get<SharedPreferences>()
+            .setString(CACHED_ID_SHOOPER, response.data['shopper']['_id']);
+        di.sl
+            .get<SharedPreferences>()
+            .setBool(CACHED_IS_Vendor, response.data['shopper']['is_shopper']);
         return Future.value(unit);
       } else {
         throw ServerException();
@@ -367,6 +390,7 @@ class ShopperApiServiceIpml implements ShopperApiService {
 
   @override
   Future<PaidShopperModel> PaidSopper() async {
+    print(di.sl.get<SharedPreferences>().getString(CACHED_Token)!);
     try {
       final response = await dio.put(
         '$BASE_URL/api/shopper/paid_month_shopper',
@@ -378,8 +402,11 @@ class ShopperApiServiceIpml implements ShopperApiService {
           },
         ),
       );
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         final msgGetWeddhal = PaidShopperModel.fromJson(response.data);
+        di.sl
+            .get<SharedPreferences>()
+            .setString(CACHED_Token, msgGetWeddhal.refreshtoken!);
         print('Response data: ${response.data}');
         return msgGetWeddhal;
       } else {

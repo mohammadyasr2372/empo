@@ -15,6 +15,8 @@ import 'package:party/features/auth/presentation/widgets/button.dart';
 import 'package:party/injection_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../features_vendor/presentation/pages/cande/post_cande/post_cande.dart';
+import '../../../features_vendor/presentation/pages/restaurant/post_restaurant/post_restaurant.dart';
 import '../../../features_vendor/presentation/pages/wedding_hall/post_wedding_hall/Wedding_Hall_Post.dart';
 import '../../../hotel/presentation/pages/hotel/post_hotel/hotel_post.dart';
 
@@ -145,23 +147,9 @@ class _AddInfoShopperState extends State<AddInfoShopper> {
                           city: city ?? 'dammascus',
                           image: _imageFile!),
                     );
-                    String temp = sl
-                        .get<SharedPreferences>()
-                        .getString(CACHED_TYPE_SHOPPER)!;
-                    print(temp);
-                    if (temp == 'Wedding Hall') {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => WeddingHallPost()));
-                    } else if (temp == 'Hotal') {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => /*CreateWallet*/ PostHotel()));
-                    } else if (temp == 'Cadies shop') {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => /*CreateWallet*/ PostHotel()));
-                    } else if (temp == 'Restorant') {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => /*CreateWallet*/ PostHotel()));
-                    }
+
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => CreateWallet()));
                   },
                   width: width)),
         ],

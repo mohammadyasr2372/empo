@@ -1,49 +1,3 @@
-// import 'dart:io';
-
-// import 'package:equatable/equatable.dart';
-
-// class ReportPostsEntity extends Equatable {
-//   ReportPostsEntity({
-//     required this.success,
-//     required this.message,
-//     required this.dataPost,
-//   });
-
-//   final bool? success;
-//   final String? message;
-//   final DataPostEntity? dataPost;
-
-//   @override
-//   List<Object?> get props => [success,message,dataPost];
-// }
-
-// class DataPostEntity extends Equatable {
-//   DataPostEntity({
-//     required this.title,
-//     required this.content,
-//     required this.images,
-//     required this.shopperId,
-//   });
-
-//   final String? title;
-//   final String? content;
-//   final List<ImageEntity> images;
-//   final String? shopperId;
-
-//   @override
-//   List<Object?> get props =>[title,content,images,shopperId];
-// }
-
-// class ImageEntity extends Equatable {
-//   ImageEntity({
-//     required this.id,
-//   });
-
-//   final File? id;
-
-//   @override
-//   List<Object?> get props => [id];
-// }
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
@@ -96,16 +50,14 @@ class ImageEntity extends Equatable {
 }
 
 class AddPostEntity extends Equatable {
+  final String? title;
+  final String? content;
+  final List<File> images;
   AddPostEntity({
-    required this.shopperId,
     required this.title,
     required this.content,
     required this.images,
   });
-  final String? shopperId;
-  final String? title;
-  final String? content;
-  final List<AddImageEntity> images;
 
   @override
   // TODO: implement props

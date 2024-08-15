@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:party/features/features_vendor/presentation/widgets/models/model_cande.dart';
 import 'package:party/features/features_vendor/presentation/widgets/models/model_restaurant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +14,7 @@ import 'package:party/core/strings/constans.dart';
 import 'package:party/injection_container.dart' as di;
 
 import '../../../../../../injection_container.dart';
+import '../../../../data/data_source/candiesshop_datasource/candiesShop_datasource.dart';
 import '../../../../data/data_source/restaurnat_data_source/resturant_datasource.dart';
 import '../../shopper/MainScreenShopper.dart';
 
@@ -125,14 +127,27 @@ class _ImageSliderState extends State<ImageSlider> {
   }
 }
 
+class MenuSweetImage {
+  final File sweet_image;
+  double sweet_price;
+  String sweet_name;
+  double sweet_amont;
+  MenuSweetImage({
+    required this.sweet_image,
+    required this.sweet_price,
+    required this.sweet_name,
+    required this.sweet_amont,
+  });
+}
+
 class MenuSlider extends StatefulWidget {
-  final List<MenuImage> menuImages;
+  final List<MenuSweetImage> menuSweetImages;
   final PageController controller;
   final VoidCallback onAddImage;
 
   const MenuSlider({
     Key? key,
-    required this.menuImages,
+    required this.menuSweetImages,
     required this.controller,
     required this.onAddImage,
   }) : super(key: key);
@@ -156,14 +171,14 @@ class _MenuSliderState extends State<MenuSlider> {
       height: 250,
       child: PageView.builder(
         controller: widget.controller,
-        itemCount: widget.menuImages.length + 1,
+        itemCount: widget.menuSweetImages.length + 1,
         onPageChanged: (value) {
           setState(() {
             _activePage = value;
           });
         },
         itemBuilder: (context, index) {
-          if (index == widget.menuImages.length) {
+          if (index == widget.menuSweetImages.length) {
             return Center(
               child: Container(
                 decoration: BoxDecoration(
@@ -188,7 +203,8 @@ class _MenuSliderState extends State<MenuSlider> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
-                      image: FileImage(widget.menuImages[index].image),
+                      image:
+                          FileImage(widget.menuSweetImages[index].sweet_image),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -198,12 +214,12 @@ class _MenuSliderState extends State<MenuSlider> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${widget.menuImages[index].name}      ',
+                      '${widget.menuSweetImages[index].sweet_name}      ',
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '${widget.menuImages[index].price} USD',
+                      '${widget.menuSweetImages[index].sweet_price} USD',
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -224,6 +240,7 @@ class _MenuSliderState extends State<MenuSlider> {
   Future<void> _showPriceDialog(BuildContext context, int index) async {
     TextEditingController _priceController = TextEditingController();
     TextEditingController _nameController = TextEditingController();
+    TextEditingController _amontController = TextEditingController();
 
     return showDialog(
       context: context,
@@ -245,6 +262,13 @@ class _MenuSliderState extends State<MenuSlider> {
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Name Food'),
               ),
+              SizedBox(
+                height: 15,
+              ),
+              TextField(
+                controller: _amontController,
+                decoration: const InputDecoration(labelText: ' Amont Sweet'),
+              ),
             ],
           ),
           actions: [
@@ -259,8 +283,9 @@ class _MenuSliderState extends State<MenuSlider> {
                 final double? price = double.tryParse(_priceController.text);
                 if (price != null && _nameController.text != null) {
                   setState(() {
-                    widget.menuImages[index].price = price;
-                    widget.menuImages[index].name = _nameController.text;
+                    widget.menuSweetImages[index].sweet_price = price;
+                    widget.menuSweetImages[index].sweet_name =
+                        _nameController.text;
                   });
                   Navigator.of(context).pop();
                 }
@@ -303,22 +328,22 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-class PostRestaurant extends StatefulWidget {
-  const PostRestaurant({
+class PostCande extends StatefulWidget {
+  const PostCande({
     Key? key,
   }) : super(key: key);
   @override
-  _PostRestaurantState createState() => _PostRestaurantState();
+  _PostCandeState createState() => _PostCandeState();
 }
 
-class _PostRestaurantState extends State<PostRestaurant> {
+class _PostCandeState extends State<PostCande> {
   final PageController _pageController = PageController(initialPage: 0);
   final PageController _hospitalityPageController =
       PageController(initialPage: 0, viewportFraction: 0.8);
 
   final ImagePickerHelper _imagePickerHelper = ImagePickerHelper();
   List<File> _initialImages = [];
-  List<MenuImage> _menuImages = [];
+  List<MenuSweetImage> _menuSweetImages = [];
   late Timer _timer;
   int _activePage = 0;
 
@@ -327,9 +352,6 @@ class _PostRestaurantState extends State<PostRestaurant> {
   double? all_table;
   double? price_table;
   List<File>? restImages;
-  final TextEditingController _price_tableController = TextEditingController();
-  final TextEditingController _num_bookedController = TextEditingController();
-  final TextEditingController _all_tableController = TextEditingController();
 
   void _startTimer() {
     _timer = Timer.periodic(
@@ -352,8 +374,6 @@ class _PostRestaurantState extends State<PostRestaurant> {
   @override
   void dispose() {
     _timer.cancel();
-    _price_tableController.dispose();
-    _all_tableController.dispose();
     super.dispose();
   }
 
@@ -364,19 +384,23 @@ class _PostRestaurantState extends State<PostRestaurant> {
         if (isInitial) {
           _initialImages.addAll(pickedImages);
         } else {
-          _menuImages.addAll(pickedImages
-              .map((image) => MenuImage(image: image, price: 0, name: ' ')));
+          _menuSweetImages.addAll(pickedImages.map((image) => MenuSweetImage(
+                sweet_amont: 0,
+                sweet_image: image,
+                sweet_price: 0,
+                sweet_name: ' ',
+              )));
         }
       });
     }
   }
 
-  void _bindShooperInput() {
-    setState(() {
-      price_table = double.tryParse(_price_tableController.text);
-      all_table = double.tryParse(_all_tableController.text);
-    });
-  }
+  // void _bindShooperInput() {
+  //   setState(() {
+  //     price_table = double.tryParse(_price_tableController.text);
+  //     all_table = double.tryParse(_all_tableController.text);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -396,35 +420,8 @@ class _PostRestaurantState extends State<PostRestaurant> {
                 onPressed: () => _pickImage(isInitial: true),
                 child: const Text('Add Image'),
               ),
-              const SizedBox(height: 10),
-              CustomTextField(
-                controller: _price_tableController,
-                labelText: 'Price Table',
-                onChanged: (value) {
-                  setState(() {
-                    _price_table = int.tryParse(value) ?? _price_table;
-                  });
-                },
-              ),
-              CustomTextField(
-                controller: _num_bookedController,
-                labelText: 'num booked Person',
-                onChanged: (value) {
-                  setState(() {
-                    _price_table = int.tryParse(value) ?? _price_table;
-                  });
-                },
-              ),
-              CustomTextField(
-                controller: _all_tableController,
-                labelText: 'Num All Table',
-                onChanged: (value) {
-                  setState(() {
-                    _all_table = int.tryParse(value) ?? _all_table;
-                  });
-                },
-              ),
-              const SizedBox(height: 10),
+
+              const SizedBox(height: 30),
               const Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
@@ -437,7 +434,7 @@ class _PostRestaurantState extends State<PostRestaurant> {
               ),
               // const SizedBox(height: 10),
               MenuSlider(
-                menuImages: _menuImages,
+                menuSweetImages: _menuSweetImages,
                 controller: _hospitalityPageController,
                 onAddImage: () => _pickImage(isInitial: false),
               ),
@@ -451,19 +448,12 @@ class _PostRestaurantState extends State<PostRestaurant> {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () async {
-                    await sl<ResturantDatasource>()
-                        .addResturantdetailsdatasource(
-                            addRestaurant: AddRestaurant(
-                                date: '2020-02-01',
-                                all_table: int.parse(_all_tableController.text),
-                                number_booked:
-                                    int.parse(_num_bookedController.text),
-                                price_table:
-                                    int.parse(_price_tableController.text),
-                                rest_image: _initialImages));
-                    _menuImages.forEach((element) async {
-                      await sl<ResturantDatasource>()
-                          .addFoodDetailsdatasource(menuImage: element);
+                    await sl<CandiesshopDatasource>().addCandedetailsdatasource(
+                        addCande: AddCande(
+                            data_open: '03:00', cande_image: _initialImages));
+                    _menuSweetImages.forEach((element) async {
+                      await sl<CandiesshopDatasource>()
+                          .addSweetDetailsdatasource(menuImage: element);
                     });
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (_) => MainScreen()));

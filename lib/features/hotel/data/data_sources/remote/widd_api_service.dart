@@ -18,6 +18,7 @@ import '../../model/get_widd_model.dart';
 abstract class WiddApiService {
   Future<Unit> addWidd({required WiddHotelPost newWidd});
   Future<GetWiddModel> get_my_widd();
+  Future<GetWiddModel> getall_widdingHotel_user();
 }
 
 class WiddApiServiceIpml implements WiddApiService {
@@ -71,6 +72,29 @@ class WiddApiServiceIpml implements WiddApiService {
   Future<GetWiddModel> get_my_widd() async {
     final response = await dio.get(
       "$BASE_URL/api/shopper/get_my_widd",
+      options: Options(
+        headers: {
+          'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+          "Content-Type": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final GetWiddModel getWiddModel =
+          GetWiddModel.fromMap(response.data['DataWidding']);
+
+      return getWiddModel;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<GetWiddModel> getall_widdingHotel_user() async {
+    final response = await dio.get(
+      "$BASE_URL/api/getall_widdingHotel_user",
       options: Options(
         headers: {
           'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,

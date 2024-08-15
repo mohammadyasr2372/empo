@@ -22,6 +22,9 @@ import 'features/auth/data/repository/shopper_repository_impl.dart';
 import 'features/auth/domain/repository/shopper_repository.dart';
 import 'features/auth/domain/usecase/shopper.dart';
 import 'features/auth/presentation/bloc/post_put_delet_shopper/post_put_delet_shopper_bloc.dart';
+import 'features/features_vendor/data/data_source/candiesshop_datasource/candiesShop_datasource.dart';
+import 'features/features_vendor/data/data_source/posts_data_source/posts_datasource.dart';
+import 'features/features_vendor/data/data_source/restaurnat_data_source/resturant_datasource.dart';
 import 'features/features_vendor/data/data_source/wedding_data_source/weddingHallDataSource.dart';
 import 'features/hotel/presentation/bloc/get_hotel/get_hotel_bloc.dart';
 import 'features/hotel/presentation/bloc/get_room/get_room_bloc.dart';
@@ -91,6 +94,12 @@ Future<void> init() async {
   sl.registerLazySingleton<WiddApiService>(() => WiddApiServiceIpml(dio: sl()));
   sl.registerLazySingleton<Weddinghalldatasource>(
       () => WeddinghalldatasourceImpl(dio: sl()));
+  sl.registerLazySingleton<ResturantDatasource>(
+      () => ResturantDatasourceImpl(dio: sl()));
+  sl.registerLazySingleton<CandiesshopDatasource>(
+      () => CandiesshopDatasourceImpl(dio: sl()));
+  sl.registerLazySingleton<PostsDatasource>(
+      () => PostdatasourceImpl(dio: sl()));
 
 //! Core
 

@@ -18,6 +18,7 @@ class ShopperBloc extends Bloc<GetShopperEvent, GetShopperState> {
 
         GetProShopperModel proShopperModel =
             await sl<ShopperApiService>().getProShopper();
+        print('bloc');
         emit(LoadedProGetShopperState(getProShopperModel: proShopperModel));
       } else if (event is RefreshProShopperEvent) {
         emit(LoadingGetShopperState());

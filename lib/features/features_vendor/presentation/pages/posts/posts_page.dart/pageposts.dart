@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../../../injection_container.dart';
+import '../../../../data/data_source/posts_data_source/posts_datasource.dart';
 import '../../../../data/models/posts_models/post_model/createpost_model.dart';
 import '../../../../domain/entities/posts_entity/post_entity/craetepost_entity.dart';
 
@@ -47,32 +49,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
   void _submitPost() async {
     final title = titleController.text;
     final content = contentController.text;
-    // final imageEntities = _images
-    //     .map((image) =>
-    //         AddImageEntity(images: 'images/Event${image.path.split('/').last}'))
-    //     .toList();
-
-    final imageEntities = _images.map((image) {
-      return AddImageModel(images: image);
-    }).toList();
 
     AddPostEntity dataPostEntity = AddPostEntity(
       title: title,
       content: content,
-      images: imageEntities,
-      shopperId: '669fe477386a29f66840a3ba',
+      images: _images,
     );
-
-    // final imagePaths = _images.map((image) => image.path).toList();
-    print('Title: $imageEntities');
+    await sl<PostsDatasource>().createpost_datasource(dataPostEntity);
 
     print('Title: $title');
     print('Description: $content');
-
-    // final imagePaths = _images
-    //     .map((image) => 'images/posts${image.path.split('/').last}')
-    //     .toList();
-    // final imagePathsString = imagePaths.toString();
   }
 
   @override

@@ -8,7 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/strings/constans.dart';
 import '../../../../injection_container.dart' as di;
+import '../../../features_vendor/presentation/pages/cande/post_cande/post_cande.dart';
+import '../../../features_vendor/presentation/pages/restaurant/post_restaurant/post_restaurant.dart';
+import '../../../features_vendor/presentation/pages/wedding_hall/post_wedding_hall/Wedding_Hall_Post.dart';
+import '../../../hotel/presentation/pages/hotel/post_hotel/hotel_post.dart';
 import '../../data/data_sources/remote/shopper_api_service.dart';
+import '../../data/model/paid_shopper_model.dart';
 
 class CreateWallet extends StatefulWidget {
   const CreateWallet({super.key});
@@ -32,22 +37,21 @@ class _CreateWalletState extends State<CreateWallet> {
   }
 
   Future<void> _checkWalletExists() async {
-    // try {
-    //   final response = await sl<ShopperApiService>().GetWallet();
-    //   if (response.data != null) {
-    //     setState(() {
-    //       walletCreated = true;
-    //       walletId = response.data ?? '';
-    //       walletBalance = response.money?.toString() ?? '0';
-    //     });
-    //     _showRechargeDialog();
-    //   } else {
-    _showCreateWalletDialog();
-    //   }
-    // } catch (e) {
-    //   _showErrorDialog('Failed to check wallet. Please try again.');
-    //   _showCreateWalletDialog();
-    // }
+    try {
+      final response = await sl<ShopperApiService>().GetWallet();
+      if (response.data != null) {
+        setState(() {
+          walletCreated = true;
+          walletId = response.data ?? '';
+          walletBalance = response.money?.toString() ?? '0';
+        });
+        _showRechargeDialog();
+      } else {}
+    } catch (e) {
+      _showCreateWalletDialog();
+      // _showErrorDialog('Failed to check wallet. Please try again.');
+      // _showCreateWalletDialog();
+    }
   }
 
   void _showCreateWalletDialog() {
@@ -248,7 +252,28 @@ class _CreateWalletState extends State<CreateWallet> {
 
   Future<void> _paidWalletBalance() async {
     try {
-      await sl<ShopperApiService>().PaidSopper();
+      PaidShopperModel paidShopperModel =
+          await sl<ShopperApiService>().PaidSopper();
+      if (paidShopperModel.success!) {
+        String temp =
+            sl.get<SharedPreferences>().getString(CACHED_TYPE_SHOPPER)!;
+        print(temp);
+        if (temp == 'Wedding Hall') {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => const WeddingHallPost()));
+        } else if (temp == 'Hotal') {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => const PostHotel()));
+        } else if (temp == 'Candies shop') {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => const PostCande()));
+        } else if (temp == 'Restorant') {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => const PostRestaurant()));
+        } else {
+          _showErrorDialog(paidShopperModel.msg!);
+        }
+      }
     } catch (e) {
       _showErrorDialog('Failed to pay. Please try again.');
     }

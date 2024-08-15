@@ -1,8 +1,13 @@
 // ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../../core/strings/constans.dart';
+import '../../../../../injection_container.dart';
+import '../../../../hotel/presentation/pages/hotel/post_hotel/add_room_hotel.dart';
 import '../Users/searchEmpo/searchEmpo.dart';
+import '../posts/posts_page.dart/pageposts.dart';
 import '../profilescreen.dart';
 import '../posts/getallpost/getpagepost.dart';
 
@@ -16,8 +21,8 @@ class _MainScreenState extends State<MainScreen> {
 
   static final List<Widget> _screens = [
     PostsPage(),
-    const Scaffold(),
-    const Scaffold(),
+    const AddRoomHotel(),
+    AddPostScreen(),
     const AccountScreen(),
     const ProfileScreen(),
   ];
@@ -26,6 +31,22 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Widget _widjetpost() {
+    String temp = sl.get<SharedPreferences>().getString(CACHED_TYPE_SHOPPER)!;
+    print(temp);
+    if (temp == 'Wedding Hall') {
+      return AddRoomHotel();
+    } else if (temp == 'Hotal') {
+      return AddRoomHotel();
+    } else if (temp == 'Candies shop') {
+      return AddRoomHotel();
+    } else if (temp == 'Restorant') {
+      return AddRoomHotel();
+    } else {
+      return Scaffold();
+    }
   }
 
   @override

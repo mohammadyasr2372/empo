@@ -30,6 +30,11 @@ abstract class RoomApiService {
   Future<List<ImageRoomModel>> getall_roomsWithsuperDelocs_shopper();
   Future<List<ImageRoomModel>> getMyroomVip_shopper();
   Future<List<ImageRoomModel>> getall_roomsWithDelocs_shopper();
+  Future<List<ImageRoomModel>> getMyroomVip_User({required String id});
+  Future<List<ImageRoomModel>> getall_roomsWithDelocs_User(
+      {required String id});
+  Future<List<ImageRoomModel>> getall_roomsWithsuperDelocs_User(
+      {required String id});
 }
 
 class RoomApiServiceIpml implements RoomApiService {
@@ -278,6 +283,86 @@ class RoomApiServiceIpml implements RoomApiService {
   Future<List<ImageRoomModel>> getall_roomsWithDelocs_shopper() async {
     final response = await dio.get(
       "$BASE_URL/api/shopper/getall_roomsWithDelocs_shopper/${di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!}",
+      options: Options(
+        headers: {
+          'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+          "Content-Type": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final List temp = response.data['imageRoom'] as List;
+      final List<ImageRoomModel> imageRoomModels = List.generate(temp.length,
+          (index) => ImageRoomModel.fromMap(response.data['imageRoom'][index]));
+
+      return imageRoomModels;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<ImageRoomModel>> getMyroomVip_User({required String id}) async {
+    print(di.sl.get<SharedPreferences>().getString(CACHED_Token)!);
+    print(
+        "$BASE_URL/api/getMyroomVipUser/${di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!}");
+    final response = await dio.get(
+      "$BASE_URL/api/User/getMyroomVip_User/${di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!}",
+      options: Options(
+        headers: {
+          'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+          "Content-Type": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final List temp = response.data['imageRoom'] as List;
+      final List<ImageRoomModel> imageRoomModels = List.generate(temp.length,
+          (index) => ImageRoomModel.fromMap(response.data['imageRoom'][index]));
+
+      return imageRoomModels;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<ImageRoomModel>> getall_roomsWithsuperDelocs_User(
+      {required String id}) async {
+    print(di.sl.get<SharedPreferences>().getString(CACHED_Token)!);
+    print("$BASE_URL/api/getall_roomsWithsuperDelocs/$id");
+    final response = await dio.get(
+      "$BASE_URL/api/User/getall_roomsWithsuperDelocs_User/${di.sl.get<SharedPreferences>().getString(CACHED_ID_HOTEL)!}",
+      options: Options(
+        headers: {
+          'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+          "Content-Type": "application/json",
+          "Access-Control_Allow_Origin": "*"
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      print(response.data);
+      final List temp = response.data['imageRoom'] as List;
+      final List<ImageRoomModel> imageRoomModels = List.generate(temp.length,
+          (index) => ImageRoomModel.fromMap(response.data['imageRoom'][index]));
+
+      return imageRoomModels;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<ImageRoomModel>> getall_roomsWithDelocs_User(
+      {required String id}) async {
+    final response = await dio.get(
+      '$BASE_URL/api/getall_roomsWithDelocs/$id',
       options: Options(
         headers: {
           'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,

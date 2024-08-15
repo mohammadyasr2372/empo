@@ -1,7 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, library_private_types_in_public_api
+// ignore_for_file: public_member_api_docs, sort_constructors_first, library_private_types_in_public_api, use_super_parameters
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:party/injection_container.dart' as di;
 
 import '../../../bloc/get_hotel/get_hotel_bloc.dart';
@@ -9,7 +10,11 @@ import 'hotel_images_section.dart';
 import 'type_section.dart';
 
 class HotelPage extends StatefulWidget {
-  const HotelPage({super.key});
+  final String id;
+  const HotelPage({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   _HotelPageState createState() => _HotelPageState();
@@ -20,7 +25,8 @@ class _HotelPageState extends State<HotelPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider(
-        create: (context) => di.sl<GetHotelBloc>()..add(GetInfoHotelEvent()),
+        create: (context) =>
+            di.sl<GetHotelBloc>()..add(GetInfoHotelEvent(id: widget.id)),
         child: BlocConsumer<GetHotelBloc, GetHotelState>(
           listener: (context, state) {},
           builder: (context, state) {
