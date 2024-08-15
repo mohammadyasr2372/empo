@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../../../../data/data_source/constBase_URL.dart';
+import '../../../../../../core/strings/constans.dart';
 import '../../../../data/data_source/restaurnat_data_source/resturant_datasource.dart';
 import '../../../../data/models/restaurant_model/getdetails_restorant/getinforestorant.dart';
 import '../../../../data/models/restaurant_model/getfood.dart';
@@ -34,7 +34,8 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
 
   Future<void> fetchRestaurantDetails() async {
     try {
-      final getinfo = await resturantDatasource.getresturantdetails_datasourece();
+      final getinfo =
+          await resturantDatasource.getresturantdetails_datasourece();
       setState(() {
         inforestorant = getinfo;
         ID = inforestorant?.data?.id; // حفظ الـ ID هنا
@@ -49,7 +50,8 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
   }
 
   Future<void> fetchgetfoodDetails() async {
-    if (ID == null) { // تحقق من وجود الـ ID
+    if (ID == null) {
+      // تحقق من وجود الـ ID
       setState(() {
         errorMessage = 'Restaurant details not loaded properly';
         isLoading = false;
@@ -58,7 +60,8 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
     }
 
     try {
-      final getfood = await resturantDatasource.getfood_datasourece(ID!); // استخدام الـ ID هنا
+      final getfood = await resturantDatasource
+          .getfood_datasourece(ID!); // استخدام الـ ID هنا
       setState(() {
         food = getfood;
         isLoading = false;
@@ -126,7 +129,8 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
             itemBuilder: (context, index) {
               final product = food!.dataProducts[index];
               return MenuCarouselview(
-                imagePath: '${BASE_URL}${product.foodImage.first.url}', // عرض الصورة الأولى في القائمة
+                imagePath:
+                    '${BASE_URL}${product.foodImage.first.url}', // عرض الصورة الأولى في القائمة
                 controller: _PageController,
                 index: index,
                 price: product.foodPrice!,

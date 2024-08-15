@@ -1,16 +1,18 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_arichitecture/features_vendor/data/data_source/constBase_URL.dart';
+import '../../../../../core/strings/constans.dart';
 import '../../../data/data_source/candiesshop_datasource/candiesShop_datasource.dart';
 import '../../../data/models/candeisshop_model/getcandyShop_model.dart';
-
 
 class ImagesSectionCandies extends StatefulWidget {
   final DatacandyshopModel
       data; // Assuming DataGetinforestorant contains the necessary image data
 
-  const ImagesSectionCandies({Key? key, required this.data,}) : super(key: key);
+  const ImagesSectionCandies({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
 
   @override
   _ImagesSectionCandiesState createState() => _ImagesSectionCandiesState();
@@ -53,18 +55,17 @@ class _ImagesSectionCandiesState extends State<ImagesSectionCandies> {
 
   Future<void> fetchRestaurantImage() async {
     try {
-      final getinfo =
-          await resturantDatasource.getCandiesShop_datasourece();
+      final getinfo = await resturantDatasource.getCandiesShop_datasourece();
       setState(() {
         inforestorant = getinfo;
 
         // Initialize the _pages list with images once the data is fetched
         _pages = inforestorant!.data!.candeImage
             .map((image) => ImagePlaceholder(
-                imagePath:
-                    '${BASE_URL}${image.url!.split('/').last}'))
+                imagePath: '${BASE_URL}${image.url!.split('/').last}'))
             .toList();
-  print('http://localhost:3000/${inforestorant!.data!.candeImage.first.url!.split('/').last}');
+        print(
+            '$BASE_URL/${inforestorant!.data!.candeImage.first.url!.split('/').last}');
 
         isLoading = false;
       });

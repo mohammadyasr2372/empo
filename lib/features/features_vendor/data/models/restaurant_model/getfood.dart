@@ -7,27 +7,28 @@ class Getfood {
 
   final bool? success;
   final String? message;
-  final DataProducts? dataProducts;
+  final List<DataProduct> dataProducts;
 
   factory Getfood.fromJson(Map<String, dynamic> json) {
     return Getfood(
       success: json["success"],
       message: json["message"],
       dataProducts: json["DataProducts"] == null
-          ? null
-          : DataProducts.fromJson(json["DataProducts"]),
+          ? []
+          : List<DataProduct>.from(
+              json["DataProducts"]!.map((x) => DataProduct.fromJson(x))),
     );
   }
 
   Map<String, dynamic> toJson() => {
         "success": success,
         "message": message,
-        "DataProducts": dataProducts?.toJson(),
+        "DataProducts": dataProducts.map((x) => x?.toJson()).toList(),
       };
 }
 
-class DataProducts {
-  DataProducts({
+class DataProduct {
+  DataProduct({
     required this.id,
     required this.foodImage,
     required this.foodPrice,
@@ -45,8 +46,8 @@ class DataProducts {
   final DateTime? createdAt;
   final int? v;
 
-  factory DataProducts.fromJson(Map<String, dynamic> json) {
-    return DataProducts(
+  factory DataProduct.fromJson(Map<String, dynamic> json) {
+    return DataProduct(
       id: json["_id"],
       foodImage: json["food_image"] == null
           ? []
@@ -64,7 +65,7 @@ class DataProducts {
 
   Map<String, dynamic> toJson() => {
         "_id": id,
-        "food_image": foodImage.map((x) => x.toJson()).toList(),
+        "food_image": foodImage.map((x) => x?.toJson()).toList(),
         "food_price": foodPrice,
         "food_name": foodName,
         "restorId": restorId.map((x) => x).toList(),

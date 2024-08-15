@@ -2,16 +2,18 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../data/data_source/constBase_URL.dart';
+import '../../../../../../core/strings/constans.dart';
 import '../../../../data/data_source/restaurnat_data_source/resturant_datasource.dart';
 import '../../../../data/models/restaurant_model/getdetails_restorant/getinforestorant.dart';
-
 
 class ImagesSectionRestorant extends StatefulWidget {
   final DataGetinforestorant
       data; // Assuming DataGetinforestorant contains the necessary image data
 
-  const ImagesSectionRestorant({Key? key, required this.data,}) : super(key: key);
+  const ImagesSectionRestorant({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
 
   @override
   _ImagesSectionRestorantState createState() => _ImagesSectionRestorantState();
@@ -62,10 +64,10 @@ class _ImagesSectionRestorantState extends State<ImagesSectionRestorant> {
         // Initialize the _pages list with images once the data is fetched
         _pages = inforestorant!.data!.restImage
             .map((image) => ImagePlaceholder(
-                imagePath:
-                    '${BASE_URL}${image.url!.split('/').last}'))
+                imagePath: '${BASE_URL}${image.url!.split('/').last}'))
             .toList();
-  print('http://localhost:3000/${inforestorant!.data!.restImage.first.url!.split('/').last}');
+        print(
+            '$BASE_URL/${inforestorant!.data!.restImage.first.url!.split('/').last}');
 
         isLoading = false;
       });

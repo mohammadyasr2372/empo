@@ -1,13 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '../../../../../features_admin/data/datasource/admin_datasource.dart';
-import '../../../../data/data_source/constBase_URL.dart';
-import '../../../widgets/widget_wedding_hall/widget_get/pageview_animate/room_carousel_view.dart';
-import 'wedding_hall_page.dart';
 
-import 'package:flutter/material.dart';
-import '../../../widgets/widget_wedding_hall/widget_get/pageview_animate/room_carousel_view.dart';
+import '../../../../../../core/strings/constans.dart';
 
 class HospitalityImagesSection extends StatefulWidget {
   final List<String> imagePaths;
@@ -26,11 +21,13 @@ class HospitalityImagesSection extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _HospitalityImagesSectionState createState() => _HospitalityImagesSectionState();
+  _HospitalityImagesSectionState createState() =>
+      _HospitalityImagesSectionState();
 }
 
 class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
-  final PageController _hospitalityPageController = PageController(initialPage: 0, viewportFraction: 0.8);
+  final PageController _hospitalityPageController =
+      PageController(initialPage: 0, viewportFraction: 0.8);
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +41,15 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
             children: [
               Text(
                 'Booking Price: ${widget.bookingPrice!}',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(width: 50),
               const Icon(Icons.person, size: 30),
               Text(
                 '= ${widget.pricePerPerson} per person',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               ),
             ],
           ),
@@ -68,7 +67,8 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
               const Icon(Icons.group, size: 30),
               Text(
                 '= ${widget.maxCapacity}',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               ),
               const SizedBox(width: 40),
               const Text(
@@ -78,7 +78,8 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
               const Icon(Icons.person, size: 30),
               Text(
                 '= ${widget.minPersons}',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               ),
             ],
           ),
@@ -112,7 +113,6 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
     );
   }
 }
-
 
 class HospitalityCarouselViewWedding extends StatelessWidget {
   final String imagePath;
@@ -163,8 +163,8 @@ class HospitalityCarouselCardWedding extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 image: DecorationImage(
-                  image: NetworkImage(
-                      '${BASE_URL}${imagePath.split('/').last}'),
+                  image:
+                      NetworkImage('${BASE_URL}${imagePath.split('/').last}'),
                   fit: BoxFit.cover,
                 ),
                 boxShadow: const [

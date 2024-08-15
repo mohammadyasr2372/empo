@@ -1,19 +1,18 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_arichitecture/features_vendor/data/data_source/constBase_URL.dart';
 
+import '../../../../../core/strings/constans.dart';
 import '../../../data/data_source/candiesshop_datasource/candiesShop_datasource.dart';
 import '../../../data/models/candeisshop_model/getSweet.dart';
 import '../../../data/models/candeisshop_model/getcandyShop_model.dart';
 
 import '../../widgets/BookingButton.dart';
 
-import '../../widgets/widget_restaurant/widget_get/menu_carousel_card.dart';
-import '../stars_hall.dart';
-import '../restaurant/get_restaurant/hospitality_images_section.dart';
 import 'imageplaceholder.dart';
 
 class CandiesShopPage extends StatefulWidget {
@@ -52,7 +51,7 @@ class _CandiesShopPageState extends State<CandiesShopPage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     } else if (errorMessage != null) {
@@ -86,6 +85,7 @@ class _CandiesShopPageState extends State<CandiesShopPage> {
     );
   }
 }
+
 class HospitalityImagesSection1 extends StatefulWidget {
   @override
   State<HospitalityImagesSection1> createState() =>
@@ -177,14 +177,16 @@ class _HospitalityImagesSection1State extends State<HospitalityImagesSection1> {
             itemCount: sweet?.dataProducts.length ?? 0, // تأكد من العدد الصحيح
             itemBuilder: (context, index) {
               final product = sweet?.dataProducts[index];
-              if (product == null) return SizedBox.shrink();
-              final imageUrl = product.sweetImage.isNotEmpty ? product.sweetImage[0].url : null;
+              if (product == null) return const SizedBox.shrink();
+              final imageUrl = product.sweetImage.isNotEmpty
+                  ? product.sweetImage[0].url
+                  : null;
 
               return MenuCarouselviewcandies(
-                imagePath: imageUrl ?? '',  // تأكد من عدم وجود قيم فارغة
+                imagePath: imageUrl ?? '', // تأكد من عدم وجود قيم فارغة
                 controller: _pageController,
                 index: index,
-                price: product.sweetPrice ?? 0,  // توفير قيمة افتراضية
+                price: product.sweetPrice ?? 0, // توفير قيمة افتراضية
                 Name: product.sweetName ?? 'N/A',
                 amount: product.sweetAmont ?? 0,
               );
@@ -196,7 +198,6 @@ class _HospitalityImagesSection1State extends State<HospitalityImagesSection1> {
     );
   }
 }
-
 
 class MenuCarouselviewcandies extends StatelessWidget {
   final String imagePath;
@@ -247,7 +248,7 @@ class MenuCarouselviewcandies extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 1,
                       ),
                       Text(
@@ -294,7 +295,7 @@ class MenuCarouselCardCandies extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
           image: DecorationImage(
-            image: NetworkImage('${BASE_URL}${imagePath.split('/').last}'),
+            image: NetworkImage('$BASE_URL${imagePath.split('/').last}'),
             fit: BoxFit.cover,
           ),
           boxShadow: const [
