@@ -18,6 +18,7 @@ import 'features/features_vendor/presentation/pages/posts/posts_page.dart/pagepo
 import 'features/features_vendor/presentation/pages/shopper/MainScreenShopper.dart';
 import 'features/features_vendor/presentation/pages/wedding_hall/post_wedding_hall/Wedding_Hall_Post.dart';
 import 'features/features_vendor/presentation/pages/wedding_hall/post_wedding_hall/post_image_hospit.dart';
+import 'features/hotel/presentation/pages/hotel/get_all_bookd.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
                 // WeddingHallPost()
                 // AddRoomHotel()
                 // LoginPage()
-                MainScreen()
+                BookingListScreen()
             // PostImageHospit()
             // AddInfoShopper(
             //   title: 'asc',
