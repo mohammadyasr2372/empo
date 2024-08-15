@@ -67,7 +67,7 @@ class CandiesshopDatasourceImpl implements CandiesshopDatasource {
   Future<GetcandyshopModel> getCandiesShop_datasourece() async {
     try {
       final response = await dio.get(
-        '${BASE_URL}/api/shopper/getMyCandshop',
+        '$BASE_URL/api/shopper/getMyCandshop',
         options: Options(
           headers: {'token': token},
         ),
@@ -93,7 +93,7 @@ class CandiesshopDatasourceImpl implements CandiesshopDatasource {
   Future<Getsweet> getSweet_datasourece(String ID) async {
     try {
       final response = await dio.get(
-        '${BASE_URL}/api/getMysweet/$ID',
+        '$BASE_URL/api/shopper/getSweets/$ID',
         options: Options(
           headers: {'token': token},
         ),

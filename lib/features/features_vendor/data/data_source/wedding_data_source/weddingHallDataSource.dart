@@ -11,6 +11,7 @@ import '../../../../../core/error/exceptions.dart';
 import '../../../../../core/strings/constans.dart';
 import '../../../../../injection_container.dart' as di;
 import '../../models/wedding_hall_model/get/get_averagestar_model.dart';
+import '../../models/wedding_hall_model/get/get_image_hospit.dart';
 import '../../models/wedding_hall_model/get/report_get.dart';
 import '../../models/wedding_hall_model/post/post_stars_model.dart';
 import '../../models/wedding_hall_model/post/rebort_Post.dart';
@@ -33,11 +34,44 @@ abstract class Weddinghalldatasource {
   Future<ReportStarModel> poststars_datasource(PostStarModle poststarModle);
   Future<averageStarsModel> AverageStarswedding_datasourece(
       IdStarModel Idstarmodel);
+  Future<Getimagehospit> getImageHospitdatasourece();
 }
 
 class WeddinghalldatasourceImpl implements Weddinghalldatasource {
   final Dio dio;
   WeddinghalldatasourceImpl({required this.dio});
+
+  @override
+  Future<Getimagehospit> getImageHospitdatasourece() async {
+    try {
+      final response = await dio.get(
+        '${BASE_URL}api/shopper/get_my_widd',
+        options: Options(
+          headers: {
+            'token': di.sl.get<SharedPreferences>().getString(CACHED_Token)!,
+            "Content-Type": "application/json",
+            "Access-Control_Allow_Origin": "*"
+          },
+        ),
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final msgGetWeddhal = Getimagehospit.fromJson(response.data);
+        return msgGetWeddhal;
+      } else {
+        print('object ${response.statusCode}');
+        throw ServerException();
+      }
+    } on DioError catch (e) {
+      if (e.response != null) {
+        print('Dio error! Response data: ${e.response!.data}');
+        print('Dio error! Status code: ${e.response?.statusCode}');
+      } else {
+        print('Dio error! Message: ${e.message}');
+      }
+      throw ServerException();
+    }
+  }
+
   @override
   Future<Unit> addweddingdetailsdatasource(
     int bookprice,
