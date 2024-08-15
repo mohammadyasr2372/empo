@@ -7,9 +7,12 @@ import '../../../../../core/strings/constans.dart';
 import '../../../../../injection_container.dart';
 import '../../../../hotel/presentation/pages/hotel/post_hotel/add_room_hotel.dart';
 import '../Users/searchEmpo/searchEmpo.dart';
+import '../cande/post_cande/add_sweet_cande.dart';
 import '../posts/posts_page.dart/pageposts.dart';
 import '../profilescreen.dart';
 import '../posts/getallpost/getpagepost.dart';
+import '../restaurant/post_restaurant/add_food_rest.dart';
+import '../wedding_hall/post_wedding_hall/post_image_hospit.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -18,10 +21,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-
+  String temp = sl.get<SharedPreferences>().getString(CACHED_TYPE_SHOPPER)!;
   static final List<Widget> _screens = [
     PostsPage(),
-    const AddRoomHotel(),
+    PostInfo(),
     AddPostScreen(),
     const AccountScreen(),
     const ProfileScreen(),
@@ -31,22 +34,6 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedIndex = index;
     });
-  }
-
-  Widget _widjetpost() {
-    String temp = sl.get<SharedPreferences>().getString(CACHED_TYPE_SHOPPER)!;
-    print(temp);
-    if (temp == 'Wedding Hall') {
-      return AddRoomHotel();
-    } else if (temp == 'Hotal') {
-      return AddRoomHotel();
-    } else if (temp == 'Candies shop') {
-      return AddRoomHotel();
-    } else if (temp == 'Restorant') {
-      return AddRoomHotel();
-    } else {
-      return Scaffold();
-    }
   }
 
   @override
@@ -93,6 +80,63 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
+class PostInfo extends StatelessWidget {
+  const PostInfo({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: height,
+        ),
+        child: ListView(
+          children: [
+            Builder(
+              builder: (BuildContext context) {
+                String? cachedType =
+                    sl.get<SharedPreferences>().getString(CACHED_TYPE_SHOPPER);
+
+                if (cachedType == 'Wedding Hall') {
+                  return SizedBox(
+                    height: height, // تحديد ارتفاع محدد
+                    child: PostImageHospit(),
+                  );
+                } else if (cachedType == 'Hotal') {
+                  return SizedBox(
+                    height: height, // تحديد ارتفاع محدد
+                    child: AddRoomHotel(),
+                  );
+                } else if (cachedType == 'Candies shop') {
+                  return const SizedBox(
+                    height: 400.0, // تحديد ارتفاع محدد
+                    child: AddSweetCande(),
+                  );
+                } else if (cachedType == 'Restaurant') {
+                  return const SizedBox(
+                    height: 400.0, // تحديد ارتفاع محدد
+                    child: AddFoodRestaurant(),
+                  );
+                } else {
+                  return Switch(
+                    value: cachedType != null,
+                    onChanged: (bool value) {
+                      // معالجة تغيير قيمة السويتش
+                    },
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
 
@@ -108,6 +152,7 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-        child: Text('Account Screen', style: TextStyle(color: Colors.white)));
+        child: Text('Account Screen',
+            style: TextStyle(color: Color.fromARGB(255, 144, 27, 27))));
   }
 }

@@ -1,21 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, use_super_parameters, library_private_types_in_public_api
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:party/features/features_vendor/presentation/widgets/models/model_cande.dart';
-import 'package:party/features/features_vendor/presentation/widgets/models/model_restaurant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:party/core/strings/constans.dart';
-import 'package:party/injection_container.dart' as di;
 
 import '../../../../../../injection_container.dart';
 import '../../../../data/data_source/candiesshop_datasource/candiesShop_datasource.dart';
-import '../../../../data/data_source/restaurnat_data_source/resturant_datasource.dart';
 import '../../shopper/MainScreenShopper.dart';
 
 class ImagePickerHelper {
@@ -157,12 +149,9 @@ class MenuSlider extends StatefulWidget {
 }
 
 class _MenuSliderState extends State<MenuSlider> {
-  late int _activePage;
-
   @override
   void initState() {
     super.initState();
-    _activePage = 0;
   }
 
   @override
@@ -173,9 +162,7 @@ class _MenuSliderState extends State<MenuSlider> {
         controller: widget.controller,
         itemCount: widget.menuSweetImages.length + 1,
         onPageChanged: (value) {
-          setState(() {
-            _activePage = value;
-          });
+          setState(() {});
         },
         itemBuilder: (context, index) {
           if (index == widget.menuSweetImages.length) {
@@ -347,29 +334,9 @@ class _PostCandeState extends State<PostCande> {
   late Timer _timer;
   int _activePage = 0;
 
-  int _price_table = 500;
-  int _all_table = 2500;
   double? all_table;
   double? price_table;
   List<File>? restImages;
-
-  void _startTimer() {
-    _timer = Timer.periodic(
-      const Duration(seconds: 3),
-      (timer) {
-        if (_initialImages.isNotEmpty &&
-            _pageController.page == _initialImages.length - 1) {
-          _pageController.animateToPage(0,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeIn);
-        } else {
-          _pageController.nextPage(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeIn);
-        }
-      },
-    );
-  }
 
   @override
   void dispose() {

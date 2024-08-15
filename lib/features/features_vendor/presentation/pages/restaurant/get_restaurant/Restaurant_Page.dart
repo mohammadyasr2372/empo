@@ -5,8 +5,10 @@ import '../../../../data/data_source/restaurnat_data_source/resturant_datasource
 import '../../../../data/models/restaurant_model/getdetails_restorant/getinforestorant.dart';
 import '../../../widgets/BookingButton.dart';
 import '../../Hall_Images_Section.dart';
-
+import '../../Hall_Information_Section.dart';
+import '../../Stars_hall.dart';
 import 'Hospitality_Images_Section.dart';
+import 'RestaurantImagesSection.dart';
 
 class RestaurantPage extends StatefulWidget {
   @override
@@ -16,8 +18,7 @@ class RestaurantPage extends StatefulWidget {
 class _RestaurantPageState extends State<RestaurantPage> {
   bool isLoading = true;
   String? errorMessage;
-  ResturantDatasourceImpl resturantDatasource =
-      ResturantDatasourceImpl(dio: Dio());
+  ResturantDatasourceImpl resturantDatasource = ResturantDatasourceImpl(dio: Dio());
   Getinforestorant? inforestorant;
 
   @override
@@ -28,8 +29,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
   Future<void> fetchRestaurantDetails() async {
     try {
-      final getinfo =
-          await resturantDatasource.getresturantdetails_datasourece();
+      final getinfo = await resturantDatasource.getresturantdetails_datasourece();
       setState(() {
         inforestorant = getinfo;
         isLoading = false;
@@ -56,22 +56,20 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
     // Assuming the data model for `Getinforestorant` has an accessible structure
     final restaurantData = inforestorant!.data;
-
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Displaying the fetched images
-            ImagesSection(
-              data: restaurantData!,
-            ),
+            ImagesSectionRestorant(data: restaurantData!,),
             // Hall Information Section
             // InformationSection(),  // You can pass relevant data to this widget if needed
             // Hospitality Images Section with prices
             HospitalityImagesSection(
-                // imagePaths: restaurantData!.hospitalityImages!.map((image) => image.url).toList(),
-                // prices: restaurantData.hospitalityPrices,
-                ),
+              // imagePaths: restaurantData!.hospitalityImages!.map((image) => image.url).toList(),
+              // prices: restaurantData.hospitalityPrices,
+            ),
             // Booking Button
             BookingButton(onPressed: () {
               // Implement navigation to booking page

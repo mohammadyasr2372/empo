@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class HospitalityCarousel extends StatelessWidget {
   final List<File> images;
@@ -30,8 +31,9 @@ class HospitalityCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 250,
+      height: 500,
       child: PageView.builder(
+        scrollDirection: Axis.vertical,
         controller: pageController,
         itemCount: images.length + 1,
         itemBuilder: (context, index) {

@@ -7,14 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:party/features/hotel/data/data_sources/remote/hotel_api_service.dart';
 import 'package:party/features/hotel/data/data_sources/remote/room_api_service.dart';
-import 'package:party/features/hotel/data/data_sources/remote/widd_api_service.dart';
 import 'package:party/features/hotel/domain/entities/hotel_entity.dart';
 import 'package:party/features/hotel/domain/entities/room_entity.dart';
-import 'package:party/features/hotel/domain/entities/widd_hotel_post.dart';
 
 import '../../../../../../injection_container.dart';
-import '../../../../../features_vendor/presentation/pages/shopper/MainScreenShopper.dart';
-import 'image_slider.dart';
 import 'room_section_post.dart';
 
 class AddRoomHotel extends StatefulWidget {
@@ -147,17 +143,17 @@ class _AddRoomHotelState extends State<AddRoomHotel> {
               onAddImage: () => _pickImage(imageList: _deluxeRoomImages),
             ),
             const SizedBox(height: 10),
-            WiddSectionPost(
-              title: 'Widd Hotal',
-              images: _WiddHotalImages,
-              pageController: _WiddController,
-              NameWiddinController: _NameWiddinController,
-              bookpriceController: _bookpriceController,
-              onAddImage: () => _pickImage(imageList: _WiddHotalImages),
-              capacityController: _capacityController,
-              personbookController: _personbookController,
-              capacityMinController: _capacityMinController,
-            ),
+            // WiddSectionPost(
+            //   title: 'Widd Hotal',
+            //   images: _WiddHotalImages,
+            //   pageController: _WiddController,
+            //   NameWiddinController: _NameWiddinController,
+            //   bookpriceController: _bookpriceController,
+            //   onAddImage: () => _pickImage(imageList: _WiddHotalImages),
+            //   capacityController: _capacityController,
+            //   personbookController: _personbookController,
+            //   capacityMinController: _capacityMinController,
+            // ),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -174,17 +170,17 @@ class _AddRoomHotelState extends State<AddRoomHotel> {
                   ));
                   await sl<RoomApiService>().addRoom(
                       newRoom: Room(
-                    room_type: 'Delocs',
-                    price_day: _deluxeRoomPriceController.text,
-                    name_room: _deluxeRoomnameController.text,
-                    image_room: _deluxeRoomImages,
-                  ));
-                  await sl<RoomApiService>().addRoom(
-                      newRoom: Room(
                     room_type: 'superDelocs',
                     price_day: _superDeluxeRoomPriceController.text,
                     name_room: _superDeluxeRoomnameController.text,
                     image_room: _superDeluxeRoomImages,
+                  ));
+                  await sl<RoomApiService>().addRoom(
+                      newRoom: Room(
+                    room_type: 'Delocs',
+                    price_day: _deluxeRoomPriceController.text,
+                    name_room: _deluxeRoomnameController.text,
+                    image_room: _deluxeRoomImages,
                   ));
                   // await sl<WiddApiService>().addWidd(
                   //     newWidd: WiddHotelPost(

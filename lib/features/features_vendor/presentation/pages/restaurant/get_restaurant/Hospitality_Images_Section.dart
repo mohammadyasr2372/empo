@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import '../../../../data/data_source/constBase_URL.dart';
 import '../../../../data/data_source/restaurnat_data_source/resturant_datasource.dart';
 import '../../../../data/models/restaurant_model/getdetails_restorant/getinforestorant.dart';
 import '../../../../data/models/restaurant_model/getfood.dart';
@@ -23,7 +24,8 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
       ResturantDatasourceImpl(dio: Dio());
   Getinforestorant? inforestorant;
   Getfood? food;
- String? ID;
+  String? ID;
+
   @override
   void initState() {
     super.initState();
@@ -32,15 +34,12 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
 
   Future<void> fetchRestaurantDetails() async {
     try {
-      final getinfo =
-          await resturantDatasource.getresturantdetails_datasourece();
-              final getfood =
-          await resturantDatasource.getfood_datasourece('66b5d1ce0969ec14d7f6d7a5');
+      final getinfo = await resturantDatasource.getresturantdetails_datasourece();
       setState(() {
         inforestorant = getinfo;
-        food=getfood;
-        isLoading = false;
+        ID = inforestorant?.data?.id; // حفظ الـ ID هنا
       });
+      await fetchgetfoodDetails(); // استدعاء fetchgetfoodDetails بعد حفظ الـ ID
     } catch (e) {
       setState(() {
         errorMessage = 'Error fetching restaurant details: $e';
@@ -48,7 +47,29 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
       });
     }
   }
-  
+
+  Future<void> fetchgetfoodDetails() async {
+    if (ID == null) { // تحقق من وجود الـ ID
+      setState(() {
+        errorMessage = 'Restaurant details not loaded properly';
+        isLoading = false;
+      });
+      return;
+    }
+
+    try {
+      final getfood = await resturantDatasource.getfood_datasourece(ID!); // استخدام الـ ID هنا
+      setState(() {
+        food = getfood;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error fetching food details: $e';
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +81,8 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
       return Center(child: Text(errorMessage!));
     }
 
-    // Guard against null data
-    if (inforestorant == null ||
-        inforestorant!.data == null ||
-        inforestorant!.data!.restImage.isEmpty) {
-      return const Center(child: Text("No data available"));
+    if (food == null || food!.dataProducts.isEmpty) {
+      return const Center(child: Text("No food data available"));
     }
 
     return Column(
@@ -76,13 +94,13 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
             children: [
               const SizedBox(width: 10),
               Text(
-                'Capacity: ${inforestorant!.data!.allTable ?? 'N/A'}',
+                'Capacity: ${inforestorant?.data?.allTable ?? 'N/A'}',
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(width: 110),
               Text(
-                'Price Table: ${inforestorant!.data!.priceTable ?? 'N/A'}',
+                'Price Table: ${inforestorant?.data?.priceTable ?? 'N/A'}',
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
@@ -104,14 +122,15 @@ class _HospitalityImagesSectionState extends State<HospitalityImagesSection> {
           height: 240,
           child: PageView.builder(
             controller: _PageController,
-            itemCount: inforestorant!.data!.restImage.length,
+            itemCount: food!.dataProducts.length,
             itemBuilder: (context, index) {
+              final product = food!.dataProducts[index];
               return MenuCarouselview(
-                imagePath:
-                    'http://localhost:3000/${food!.dataProducts!.foodImage.first!.url!}',
+                imagePath: '${BASE_URL}${product.foodImage.first.url}', // عرض الصورة الأولى في القائمة
                 controller: _PageController,
                 index: index,
-                price: food!.dataProducts!.foodPrice!, Name: food!.dataProducts!.foodName!, // Adjust price or get dynamically if available
+                price: product.foodPrice!,
+                Name: product.foodName!,
               );
             },
           ),
